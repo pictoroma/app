@@ -1,0 +1,6 @@
+
+mutation RegisterPushNotification($token: String!) {
+  registerPushNotification(token: $token) {
+    id
+  }
+}

@@ -1,0 +1,44 @@
+query Feeds {
+  feeds {
+    id
+    name
+    posts {
+      id
+      body
+      media {
+        id
+      }
+    }
+  }
+}
+
+query Feed($feedId: String!) {
+  feed(id: $feedId) {
+    id
+    name
+    users {
+      accessType
+      user {
+        id
+        name
+        username
+      }
+    }
+  }
+}
+
+mutation CreateFeed($name: String!) {
+  createFeed(name: $name) {
+    id
+  }
+}
+
+mutation AddUserToFeed($accessType: String!, $userId: String!, $feedId: String!) {
+  addUserToFeed(accessType: $accessType, userId: $userId, feedId: $feedId) {
+    accessType
+  }
+}
+
+mutation RemoveUserFromFeed($userId: String!, $feedId: String!) {
+  removeUserFromFeed(userId: $userId, feedId: $feedId)
+}

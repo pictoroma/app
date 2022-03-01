@@ -1,0 +1,23 @@
+query Posts($filter: PostFindParameters!) {
+  posts(filter: $filter) {
+    id
+    body
+    creator {
+      name
+      username
+      avatar
+    }
+    created
+    media {
+      id
+      aspect
+      type
+    }
+  }
+}
+
+mutation CreatePost($params: PostCreateParameters!) {
+  createPost(params: $params) {
+    id
+  }
+}

@@ -1,0 +1,10 @@
+schema: https://olli.mortenolsen.pro/graphql
+documents: './queries/*.graphql'
+generates:
+  ./src/hooks/graphql.tsx:
+    config:
+      withHooks: true
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo

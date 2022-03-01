@@ -1,0 +1,22 @@
+query Profile {
+  profile {
+    id
+    username
+    name
+    admin
+    avatar
+    feeds {
+      feed {
+        id
+        name
+      }
+      accessType
+    }
+  }
+}
+
+mutation SetProfileAvatar($mediaId: String) {
+  setProfileAvatar(mediaId: $mediaId) {
+    id
+  }
+}
