@@ -1,6 +1,6 @@
 export const linkingConfig = {
   prefixes: ['pictoroma://'],
   screens: {
-    AcceptInvitation: 'login/accept-invite', 
+    AcceptInvitation: 'login/accept-invite',
   },
 };

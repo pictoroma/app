@@ -18,7 +18,7 @@ const InputField = styled.TextInput`
   width: 100%;
 `;
 
-const Input: React.FC<Props> = ({ 
+const Input: React.FC<Props> = ({
   label,
   value,
   onChangeText,

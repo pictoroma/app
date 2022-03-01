@@ -13,7 +13,7 @@ export default function App() {
     <ThemeProvider theme={colorScheme === 'dark' ? dark : light}>
       <SafeAreaProvider>
         <ServerProvider>
-          <StatusBar style={colorScheme === 'dark' ? "light" : "dark"} />
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           <GraphQLProvider>
             <Router colorScheme={colorScheme} />
           </GraphQLProvider>

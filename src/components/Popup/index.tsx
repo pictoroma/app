@@ -37,23 +37,22 @@ const Popup: React.FC<Props> = ({ visible, children, onClose }) => {
   return (
     <Modal visible={visible} transparent animationType="slide">
       <Page>
-      <Outer>
-        <Top onPress={onClose} />
-        <Wrapper style={{ paddingBottom: insets.bottom + 12 }}>
-          <Row
-            right={
-              <Cell onPress={onClose}>
-                <Icon name="x-circle" />
-              </Cell>
-            }
-          />
-          {children}
-        </Wrapper>
-      </Outer>
+        <Outer>
+          <Top onPress={onClose} />
+          <Wrapper style={{ paddingBottom: insets.bottom + 12 }}>
+            <Row
+              right={
+                <Cell onPress={onClose}>
+                  <Icon name="x-circle" />
+                </Cell>
+              }
+            />
+            {children}
+          </Wrapper>
+        </Outer>
       </Page>
     </Modal>
   );
 };
 
 export { Popup };
-

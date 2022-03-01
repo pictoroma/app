@@ -45,4 +45,3 @@ const Link = styled(BaseText)`
 
 export type { TextProps };
 export { Jumbo, Title2, Title1, Body1, Overline, Caption, Link };
-

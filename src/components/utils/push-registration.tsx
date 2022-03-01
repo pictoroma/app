@@ -6,19 +6,16 @@ const PushRegistation: React.FC<{}> = () => {
   const { pushToken } = useContext(ServerContext);
   const [registerPushMutation] = useRegisterPushNotificationMutation();
 
-  useEffect(
-    () => {
-      if (!pushToken) {
-        return;
-      }
-      registerPushMutation({
-        variables: {
-          token: pushToken,
-        }
-      });
-    },
-    [pushToken],
-  )
+  useEffect(() => {
+    if (!pushToken) {
+      return;
+    }
+    registerPushMutation({
+      variables: {
+        token: pushToken,
+      },
+    });
+  }, [pushToken]);
 
   return <></>;
 };

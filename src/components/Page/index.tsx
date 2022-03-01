@@ -8,7 +8,7 @@ const KeyboardAvoiding = styled.KeyboardAvoidingView`
 
 const Pressable = styled.Pressable`
   flex: 1;
-`
+`;
 
 const Page: React.FC = ({ children }) => {
   const [keyboardShown, setKeyboardShown] = useState(false);
@@ -24,10 +24,7 @@ const Page: React.FC = ({ children }) => {
     };
   }, []);
   return (
-    <Pressable
-      disabled={!keyboardShown}
-      onPress={() => Keyboard.dismiss()}
-    >
+    <Pressable disabled={!keyboardShown} onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoiding behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         {children}
       </KeyboardAvoiding>
@@ -36,4 +33,3 @@ const Page: React.FC = ({ children }) => {
 };
 
 export { Page };
-

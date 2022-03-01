@@ -35,48 +35,42 @@ function Dialog<T>({
   create,
   allowClear,
 }: Props<T>) {
-  const [searchInput, setSeachInput] = useState('')
-  const results = useMemo(
-    () => {
-      if (!search || !searchInput) {
-        return items;
-      }
-      return search(searchInput, items);
-    },
-    [items, searchInput, search]
-  )
-  const hide = useCallback(
-    () => {
-      setSeachInput('');
-      onClose();
-    },
-    [setSeachInput, onClose],
-  );
+  const [searchInput, setSeachInput] = useState('');
+  const results = useMemo(() => {
+    if (!search || !searchInput) {
+      return items;
+    }
+    return search(searchInput, items);
+  }, [items, searchInput, search]);
+  const hide = useCallback(() => {
+    setSeachInput('');
+    onClose();
+  }, [setSeachInput, onClose]);
 
   const select = useCallback(
     (item: T) => {
       onSelect(item);
       hide();
     },
-    [onSelect, hide],
+    [onSelect, hide]
   );
-  const createItem = useCallback(
-    async () => {
-      if (!create) return;
-      const item = await create(searchInput);
-      onSelect(item);
-      hide();
-    },
-    [create, searchInput, hide]
-  );
+  const createItem = useCallback(async () => {
+    if (!create) {
+      return;
+    }
+    const item = await create(searchInput);
+    onSelect(item);
+    hide();
+  }, [create, searchInput, hide]);
   return (
-    <Popup
-      visible={visible}
-      onClose={hide}
-    >
+    <Popup visible={visible} onClose={hide}>
       {search && (
         <Row>
-          <Input label="Search" value={searchInput} onChangeText={setSeachInput} />
+          <Input
+            label="Search"
+            value={searchInput}
+            onChangeText={setSeachInput}
+          />
         </Row>
       )}
       <Content>
@@ -91,10 +85,7 @@ function Dialog<T>({
             keyExtractor={getKey}
             style={{ flex: 1 }}
             renderItem={({ item }) => (
-              <Touch onPress={() => select(item)}>
-                {renderSelect(item)}
-              </Touch>
-
+              <Touch onPress={() => select(item)}>{renderSelect(item)}</Touch>
             )}
           />
         )}
@@ -105,7 +96,7 @@ function Dialog<T>({
         )}
       </Content>
     </Popup>
-  )
+  );
 }
 
 export { Dialog };

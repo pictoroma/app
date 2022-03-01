@@ -1,18 +1,18 @@
-import { Row, Dialog } from "#/components";
-import { Body1 } from "#/typography";
-import { useState } from "react";
+import { Row, Dialog } from '#/components';
+import { Body1 } from '#/typography';
+import { useState } from 'react';
 
 type NameValueInputItem = {
   key: string;
   value: any;
-}
+};
 
 type NameValueInputProps = {
   label: string;
   items: NameValueInputItem[];
   selected?: NameValueInputItem;
   onSelect: (item?: NameValueInputItem) => void;
-}
+};
 
 const NameValueInput: React.FC<NameValueInputProps> = ({
   label,
@@ -33,14 +33,10 @@ const NameValueInput: React.FC<NameValueInputProps> = ({
         items={items}
         getKey={item => item.key}
         onSelect={onSelect}
-        renderSelect={(item) => (
-          <Row
-            title={item.key}
-          />
-        )}
+        renderSelect={item => <Row title={item.key} />}
       />
     </>
   );
-}
+};
 
 export { NameValueInputItem, NameValueInput };

@@ -1,4 +1,3 @@
-
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components/native';
 import { Input } from '#/components/Input';
@@ -28,36 +27,32 @@ const Content = styled.View`
   margin: 30px;
   background: ${({ theme }) => theme.colors.background};
   border-radius: 15px;
-`
+`;
 
-const AcceptInvitationScreen: React.FC<AcceptInvitationScreenNavigationProp> = ({
-  route,
-  navigation,
-}) => {
+const AcceptInvitationScreen: React.FC<
+  AcceptInvitationScreenNavigationProp
+> = ({ route, navigation }) => {
   const { inviteCode } = route.params;
-  const { acceptInvitation } = useContext(ServerContext)
+  const { acceptInvitation } = useContext(ServerContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
 
-  const doAccept = useCallback(
-    () => {
-      setLoading(true);
-      const run = async () => {
-        await acceptInvitation(inviteCode, username, password);
-        setLoading(false);
-      }
-      run().catch((err) => {
-        setLoading(false);
-        setError(err);
-      })
-    },
-    [inviteCode, username, password],
-  )
+  const doAccept = useCallback(() => {
+    setLoading(true);
+    const run = async () => {
+      await acceptInvitation(inviteCode, username, password);
+      setLoading(false);
+    };
+    run().catch(err => {
+      setLoading(false);
+      setError(err);
+    });
+  }, [inviteCode, username, password]);
 
   if (loading) {
-    return <Text>Loading</Text>
+    return <Text>Loading</Text>;
   }
 
   return (
@@ -66,11 +61,33 @@ const AcceptInvitationScreen: React.FC<AcceptInvitationScreenNavigationProp> = (
         <Content>
           <Image source={image} />
           <Row description="You are almost there! Just pick your username and password and off we go!" />
-          <Row left={<Cell><Icon name="user" /></Cell>}>
-            <Input autoCorrect={false} label="Username" value={username} onChangeText={setUsername} />
+          <Row
+            left={
+              <Cell>
+                <Icon name="user" />
+              </Cell>
+            }
+          >
+            <Input
+              autoCorrect={false}
+              label="Username"
+              value={username}
+              onChangeText={setUsername}
+            />
           </Row>
-          <Row left={<Cell><Icon name="key" /></Cell>}>
-            <Input secure label="Password" value={password} onChangeText={setPassword} />
+          <Row
+            left={
+              <Cell>
+                <Icon name="key" />
+              </Cell>
+            }
+          >
+            <Input
+              secure
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+            />
           </Row>
           <Row>
             <Button onPress={doAccept} title="Let's GO" />
@@ -78,7 +95,7 @@ const AcceptInvitationScreen: React.FC<AcceptInvitationScreenNavigationProp> = (
         </Content>
       </Wrapper>
     </Page>
-  )
-}
+  );
+};
 
 export { AcceptInvitationScreen };

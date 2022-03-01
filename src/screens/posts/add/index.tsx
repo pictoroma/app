@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { AddScreenNavigationProp } from '#/router/types';
 import { UploadFile, useCreatePost } from '#/hooks/posts';
 import { useFocusEffect } from '@react-navigation/native';
-import { Page, FeedInput, AddImages, Row, Input, Button} from '#/components';
+import { Page, FeedInput, AddImages, Row, Input, Button } from '#/components';
 import { Header } from '#/components';
 import { useProfile } from '#/hooks/profile';
 
@@ -17,34 +17,30 @@ const Outer = styled.View`
 
 const AddPostScreen: React.FC<AddScreenNavigationProp> = ({ navigation }) => {
   const { feeds, refetch } = useProfile();
-  const [selectedFeed, setSelectedFeed] = useState<any>()
+  const [selectedFeed, setSelectedFeed] = useState<any>();
   const [media, setMedia] = useState<UploadFile[]>([]);
   const [body, setBody] = useState('');
   const createPost = useCreatePost();
   const adminFeeds = useMemo(
     () => feeds?.filter(f => f.accessType === 'admin').map(f => f.feed) || [],
-    [feeds],
+    [feeds]
   );
 
-  const submit = useCallback(
-    async () => {
-      await createPost(selectedFeed.id, body, media);
-      setSelectedFeed(undefined);
-      setMedia([]);
-      setBody('');
-      navigation.navigate('Feed', {});
-    },
-    [selectedFeed, body, media]
-  );
+  const submit = useCallback(async () => {
+    await createPost(selectedFeed.id, body, media);
+    setSelectedFeed(undefined);
+    setMedia([]);
+    setBody('');
+    navigation.navigate('Feed', {});
+  }, [selectedFeed, body, media]);
   useFocusEffect(
-    useCallback(
-      () => { refetch(); },
-      [refetch],
-    ),
+    useCallback(() => {
+      refetch();
+    }, [refetch])
   );
 
   if (!feeds) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -60,15 +56,21 @@ const AddPostScreen: React.FC<AddScreenNavigationProp> = ({ navigation }) => {
             onSelect={setSelectedFeed}
           />
           <Row overline="Content">
-            <Input label="Tell your story..." value={body} onChangeText={setBody} />
+            <Input
+              label="Tell your story..."
+              value={body}
+              onChangeText={setBody}
+            />
           </Row>
         </Wrapper>
         <Row>
-          {!!selectedFeed && media.length > 0 &&  <Button onPress={submit} title="Create" />}
+          {!!selectedFeed && media.length > 0 && (
+            <Button onPress={submit} title="Create" />
+          )}
         </Row>
       </Outer>
     </Page>
   );
-}
+};
 
 export { AddPostScreen };

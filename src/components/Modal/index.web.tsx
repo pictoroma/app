@@ -34,11 +34,7 @@ const Modal: React.FC<Props> = ({ visible, children }) => {
     }
   }, [elm, visible]);
 
-  return ReactDOM.createPortal(
-    <>{children}</>,
-    elm,
-  );
+  return ReactDOM.createPortal(<>{children}</>, elm);
 };
 
 export { Modal };
-

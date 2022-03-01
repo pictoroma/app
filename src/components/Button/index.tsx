@@ -23,11 +23,11 @@ const getColors = (type: Props['type'], theme: Theme) => {
     return { bg: 'transparent', fg: theme.colors.destructive };
   }
   return { bg: theme.colors.primary, fg: '#fff' };
-}
+};
 
 const Wrapper = styled.View<{
-  theme: Theme,
-  type: Props['type']
+  theme: Theme;
+  type: Props['type'];
 }>`
   background: ${({ theme, type }) => getColors(type, theme).bg};
   padding: ${({ theme }) => theme.margins.small}px;
@@ -36,12 +36,12 @@ const Wrapper = styled.View<{
 `;
 
 const StyledLink = styled<{
-  theme: Theme,
-  type: Props['type']
+  theme: Theme;
+  type: Props['type'];
 }>(Link)`
   color: ${({ theme, type }) => getColors(type, theme).fg};
   font-weight: bold;
-`
+`;
 
 const Button: React.FC<Props> = ({
   title,
@@ -65,4 +65,3 @@ const Button: React.FC<Props> = ({
 );
 
 export { Button };
-

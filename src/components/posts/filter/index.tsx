@@ -22,31 +22,30 @@ const PostFilter: React.FC<PostFilterProps> = ({
   feeds = [],
   onSelect,
 }) => {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
   return (
     <>
       <Cell onPress={() => setVisible(true)}>
         <Icon name="filter" color={selected.length > 0 ? 'primary' : 'text'} />
       </Cell>
       <Popup visible={visible} onClose={() => setVisible(false)}>
-        {feeds.map((feed) => {
+        {feeds.map(feed => {
           const isSelected = selected.includes(feed.id);
           return (
             <Row
-              onPress={isSelected
-                ? () => onSelect(selected.filter(s => s !== feed.id))
-                : () => onSelect([...selected, feed.id])
+              onPress={
+                isSelected
+                  ? () => onSelect(selected.filter(s => s !== feed.id))
+                  : () => onSelect([...selected, feed.id])
               }
-              left={(   
-                <Cell >
-                  <Icon
-                    name={isSelected ? 'check-circle' : 'circle' }
-                  />
+              left={
+                <Cell>
+                  <Icon name={isSelected ? 'check-circle' : 'circle'} />
                 </Cell>
-              )} 
+              }
               title={feed.name}
             />
-          )
+          );
         })}
         {selected.length > 0 && (
           <Row>
@@ -58,6 +57,4 @@ const PostFilter: React.FC<PostFilterProps> = ({
   );
 };
 
-export {
-  PostFilter,
-}
+export { PostFilter };

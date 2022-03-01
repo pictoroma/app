@@ -1,14 +1,13 @@
 import React, { useContext, useMemo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme,
-  DarkTheme, } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'styled-components/native';
-import {
-    ProfileParamList,
-  RootStackParamList,
-  TabParamList,  
-} from './types';
+import { ProfileParamList, RootStackParamList, TabParamList } from './types';
 import { linkingConfig } from './linking';
 import { Icon, PushRegistation } from '#/components';
 
@@ -31,14 +30,20 @@ const Profile = () => {
       <ProfileStack.Screen name="ProfileMain" component={ProfileScreen} />
     </ProfileStack.Navigator>
   );
-}
+};
 
 const Tabs = () => {
   const theme = useTheme();
   const { profile } = useProfile();
   const canCreate = useMemo(
-    () => profile?.feeds?.find(f => f.accessType === 'admin' || f.accessType === 'moderator' || f.accessType === 'writer'),
-    [profile],
+    () =>
+      profile?.feeds?.find(
+        f =>
+          f.accessType === 'admin' ||
+          f.accessType === 'moderator' ||
+          f.accessType === 'writer'
+      ),
+    [profile]
   );
   return (
     <>
@@ -55,7 +60,11 @@ const Tabs = () => {
           options={{
             title: 'Posts',
             tabBarIcon: ({ focused }) => (
-              <Icon color={focused ? 'primary' : 'text'} name="home" size={28} />
+              <Icon
+                color={focused ? 'primary' : 'text'}
+                name="home"
+                size={28}
+              />
             ),
           }}
         />
@@ -66,7 +75,11 @@ const Tabs = () => {
             options={{
               title: 'Add',
               tabBarIcon: ({ focused }) => (
-                <Icon color={focused ? 'primary' : 'text'} name="plus-square" size={28} />
+                <Icon
+                  color={focused ? 'primary' : 'text'}
+                  name="plus-square"
+                  size={28}
+                />
               ),
             }}
           />
@@ -77,7 +90,11 @@ const Tabs = () => {
           options={{
             title: 'Profile',
             tabBarIcon: ({ focused }) => (
-              <Icon color={focused ? 'primary' : 'text'} name="user" size={28} />
+              <Icon
+                color={focused ? 'primary' : 'text'}
+                name="user"
+                size={28}
+              />
             ),
           }}
         />
@@ -99,9 +116,9 @@ const Root = () => {
           <RootStack.Group
             screenOptions={{
               contentStyle: {
-                  backgroundColor: theme.colors.shade,
-                },
-              presentation: 'modal'
+                backgroundColor: theme.colors.shade,
+              },
+              presentation: 'modal',
             }}
           >
             <RootStack.Screen name="FeedEdit" component={FeedEditScreen} />
@@ -110,7 +127,11 @@ const Root = () => {
       ) : (
         <RootStack.Group>
           <RootStack.Screen name="Login" component={LoginScreen} />
-          <RootStack.Screen initialParams={{inviteCode: ''}} name="AcceptInvitation" component={AcceptInvitationScreen} />
+          <RootStack.Screen
+            initialParams={{ inviteCode: '' }}
+            name="AcceptInvitation"
+            component={AcceptInvitationScreen}
+          />
         </RootStack.Group>
       )}
     </RootStack.Navigator>
@@ -124,8 +145,8 @@ interface RouterProps {
 const Router: React.FC<RouterProps> = ({ colorScheme }) => {
   const theme = useTheme();
   const baseTheme = useMemo(
-    () => colorScheme === 'dark' ? DarkTheme : DefaultTheme,
-    [colorScheme],
+    () => (colorScheme === 'dark' ? DarkTheme : DefaultTheme),
+    [colorScheme]
   );
   const navigationTheme = useMemo(
     () => ({
@@ -135,9 +156,9 @@ const Router: React.FC<RouterProps> = ({ colorScheme }) => {
         background: theme.colors.shade,
         card: theme.colors.background,
         text: theme.colors.text,
-      }
+      },
     }),
-    [baseTheme, theme],
+    [baseTheme, theme]
   );
   return (
     <>
@@ -148,6 +169,4 @@ const Router: React.FC<RouterProps> = ({ colorScheme }) => {
   );
 };
 
-export {
-  Router,
-};
+export { Router };

@@ -22,7 +22,8 @@ const Wrapper = styled.View<{
   theme: Theme;
   align?: 'flex-start' | 'flex-end' | 'center' | 'stretch';
 }>`
-  padding: ${({ theme }) => theme.margins.medium / 2}px ${({ theme }) => theme.margins.medium / 2}px;
+  padding: ${({ theme }) => theme.margins.medium / 2}px
+    ${({ theme }) => theme.margins.medium / 2}px;
   ${({ background }) => (background ? `background: ${background};` : '')}
   ${({ flex }) => (flex ? `flex: ${flex};` : '')}
   flex-direction: ${({ direction }) => (direction ? direction : 'row')};
@@ -31,18 +32,14 @@ const Wrapper = styled.View<{
 
 const Touch = styled.TouchableOpacity``;
 
-const Cell: React.FC<Props> = ({ children, onPress, ...props}) => {
+const Cell: React.FC<Props> = ({ children, onPress, ...props }) => {
   const {
     accessibilityLabel,
     accessibilityRole,
     accessibilityHint,
     ...others
   } = props;
-  const node = (
-    <Wrapper {...others}>
-      {children}
-    </Wrapper>
-  );
+  const node = <Wrapper {...others}>{children}</Wrapper>;
   if (onPress) {
     return (
       <Touch
@@ -60,4 +57,3 @@ const Cell: React.FC<Props> = ({ children, onPress, ...props}) => {
 };
 
 export { Cell };
-

@@ -1,6 +1,16 @@
 import { useCallback, useContext, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { Avatar, Button, Cell, Group, Header, Input, Page, Popup, Row } from '#/components';
+import {
+  Avatar,
+  Button,
+  Cell,
+  Group,
+  Header,
+  Input,
+  Page,
+  Popup,
+  Row,
+} from '#/components';
 import { useProfile, useSetAvatar } from '#/hooks/profile';
 import { ProfileMainScreenNavigationProp } from '#/router/types';
 import { useCreateFeed } from '#/hooks/feeds';
@@ -15,59 +25,50 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
   const [addFeedVisible, setAddFeedVisible] = useState(false);
   const [feedName, setFeedName] = useState('');
   const setAvatar = useSetAvatar();
-  const pickImage = useCallback(
-    async () => {
-      // No permissions request is necessary for launching the image library
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        quality: 1,
-        base64: true,
-      });
+  const pickImage = useCallback(async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+      base64: true,
+    });
 
-      if (result.cancelled || !result.base64) {
-        return;
-      }
-      let [filename] = result.uri.split('/');
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
+    if (result.cancelled || !result.base64) {
+      return;
+    }
+    let [filename] = result.uri.split('/');
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : 'image';
 
-      const file = {
-        type,
-        name: filename,
-        uri: result.uri,
-      }
-      await setAvatar(file);
-      await refetch();
-    },
-    [],
-  );
-  const saveAddFeed = useCallback(
-    async () => {
-      await createFeed(feedName);
-      setFeedName('');
-      setAddFeedVisible(false);
-      await refetch();
-    },
-    [feedName, createFeed],
-  );
+    const file = {
+      type,
+      name: filename,
+      uri: result.uri,
+    };
+    await setAvatar(file);
+    await refetch();
+  }, []);
+  const saveAddFeed = useCallback(async () => {
+    await createFeed(feedName);
+    setFeedName('');
+    setAddFeedVisible(false);
+    await refetch();
+  }, [feedName, createFeed]);
   return (
     <Page>
-      <Header title="Profile" /> 
+      <Header title="Profile" />
       <Row
-        left={(
+        left={
           <Cell>
             <Avatar
               mediaId={profile?.avatar || undefined}
-              onPress={pickImage} 
+              onPress={pickImage}
             />
           </Cell>
-        )}
+        }
         title={profile?.name || profile?.username}
-      /> 
-      <Popup
-        visible={addFeedVisible}
-        onClose={() => setAddFeedVisible(false)}
-      >
+      />
+      <Popup visible={addFeedVisible} onClose={() => setAddFeedVisible(false)}>
         <Row>
           <Input label="Name" value={feedName} onChangeText={setFeedName} />
         </Row>
@@ -79,20 +80,24 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
         title="My feeds"
         items={feeds}
         getKey={item => item.feed.id}
-        add={profile?.admin ? () => {
-          setAddFeedVisible(true);
-        } : undefined}
+        add={
+          profile?.admin
+            ? () => {
+                setAddFeedVisible(true);
+              }
+            : undefined
+        }
         render={item => (
           <Row
             title={item.feed.name}
             overline={item.accessType}
-            right={(
+            right={
               <Cell>
                 <Button title="Leave" type="destructive" />
               </Cell>
-            )}
+            }
             onPress={() => {
-              navigation.navigate('FeedEdit', { id: item.feed.id })
+              navigation.navigate('FeedEdit', { id: item.feed.id });
             }}
           />
         )}
@@ -101,7 +106,7 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
         <Button title="Logout" type="destructive" onPress={logout} />
       </Row>
     </Page>
-  )
+  );
 };
 
-export { ProfileScreen }
+export { ProfileScreen };

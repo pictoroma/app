@@ -18,42 +18,37 @@ const ImageWrapper = styled.Image`
   background: #ccc;
 `;
 
-
 type Props = {
-  media: DeepPartial<MediaModel>
-}
+  media: DeepPartial<MediaModel>;
+};
 const Image: React.FC<Props> = ({ media }) => {
   const { domain, token } = useContext(ServerContext);
   const [width, setWidth] = useState<number>(0);
-  useEffect(
-    () => {
-      const run = async () => {
-        const response = await fetch(`${domain}/api/thumb/${media.id!}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': token,
-          },
-        });
-        console.log(response.ok);
-      };
-      run();
-    },
-    [domain, token, media.id],
-  );
+  useEffect(() => {
+    const run = async () => {
+      const response = await fetch(`${domain}/api/thumb/${media.id!}`, {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response.ok);
+    };
+    run();
+  }, [domain, token, media.id]);
   return (
     <Wrapper
       height={width / media.aspect!}
-      onLayout={(evt) => {
+      onLayout={evt => {
         const currentWidth = evt.nativeEvent.layout.width;
         if (currentWidth !== width) {
           setWidth(currentWidth);
         }
       }}
     >
-      <ImageWrapper
-      />
+      <ImageWrapper />
     </Wrapper>
-  )
+  );
 };
 
 export { Image };

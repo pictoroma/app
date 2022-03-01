@@ -1,8 +1,8 @@
 import styled, { ThemeProvider } from 'styled-components/native';
-import ImageView from "react-native-image-viewing";
-import { DeepPartial } from "#/helpers/types"
-import { MediaModel } from "#/hooks/graphql"
-import { Image } from "../Image"
+import ImageView from 'react-native-image-viewing';
+import { DeepPartial } from '#/helpers/types';
+import { MediaModel } from '#/hooks/graphql';
+import { Image } from '../Image';
 import { Cell, Row } from '../Row';
 import { useContext, useMemo, useState } from 'react';
 import { ServerContext } from '#/context/server';
@@ -20,8 +20,7 @@ const ScrollContent = styled.View`
   flex-direction: row;
 `;
 
-const Touchable = styled.TouchableWithoutFeedback`
-`;
+const Touchable = styled.TouchableWithoutFeedback``;
 
 const ScrollPage = styled.View<{
   width: number;
@@ -37,7 +36,7 @@ const Wrapper = styled.View`
 type PagerProps = {
   current: number;
   total: number;
-}
+};
 
 const DotWrapper = styled.View`
   margin-top: 10px;
@@ -51,29 +50,29 @@ const Dot = styled.View<{
 }>`
   width: 6px;
   height: 6px;
-  background: ${({ selected }) => selected ? '#000' : '#ccc'};
+  background: ${({ selected }) => (selected ? '#000' : '#ccc')};
   margin: 0 5px;
   border-radius: 3px;
-`
+`;
 
 const Pager: React.FC<PagerProps> = ({ current, total }) => {
   const dots = useMemo(
     () => new Array(total).fill(undefined).map((_, i) => i),
-    [total],
-  )
+    [total]
+  );
 
   return (
     <DotWrapper>
-      {dots.map((i) => (
+      {dots.map(i => (
         <Dot key={i} selected={i === current} />
       ))}
     </DotWrapper>
-  )
+  );
 };
 
 type GalleryProps = {
   media: DeepPartial<MediaModel[]>;
-}
+};
 
 const Gallery: React.FC<GalleryProps> = ({ media }) => {
   const [width, setWidth] = useState(0);
@@ -81,25 +80,26 @@ const Gallery: React.FC<GalleryProps> = ({ media }) => {
   const { domain, token } = useContext(ServerContext);
   const currentIndex = useMemo(
     () => Math.round(offset / width) || 0,
-    [offset, width],
+    [offset, width]
   );
   const [lightboxVisible, setLightboxVisible] = useState(false);
   const lightboxImages = useMemo(
-    () => media.map(item => ({
-      uri: `${domain}/api/media/${item?.id}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    })),
-    [domain, token, media],
-  )
+    () =>
+      media.map(item => ({
+        uri: `${domain}/api/media/${item?.id}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })),
+    [domain, token, media]
+  );
   const currentMedia = useMemo(
     () => media[currentIndex],
-    [media, currentIndex],
+    [media, currentIndex]
   );
   const currentAspect = useMemo(
     () => currentMedia?.aspect || 1, // use current media aspect
-    [currentMedia],
+    [currentMedia]
   );
 
   if (media.length === 0) {
@@ -114,18 +114,17 @@ const Gallery: React.FC<GalleryProps> = ({ media }) => {
       FooterComponent={() => (
         <ThemeProvider theme={dark}>
           <Row
-            right={(
+            right={
               <Cell>
                 <Icon name="download" />
               </Cell>
-            )}
+            }
           />
           <Row />
         </ThemeProvider>
       )}
     />
-
-  )
+  );
   if (media.length === 1) {
     return (
       <Row>
@@ -152,11 +151,11 @@ const Gallery: React.FC<GalleryProps> = ({ media }) => {
           snapToAlignment="center"
           disableIntervalMomentum
           height={width / currentAspect}
-          onScroll={(evt) => {
+          onScroll={evt => {
             const offset = evt.nativeEvent.contentOffset.x;
             setOffset(offset);
           }}
-          onLayout={(evt) => {
+          onLayout={evt => {
             const currentWidth = evt.nativeEvent.layout.width;
             if (currentWidth !== width) {
               setWidth(currentWidth);
@@ -165,9 +164,9 @@ const Gallery: React.FC<GalleryProps> = ({ media }) => {
         >
           <Touchable onPress={() => setLightboxVisible(true)}>
             <ScrollContent>
-              {media.map((item) => (
+              {media.map(item => (
                 <ScrollPage key={item!.id} width={width}>
-                    <Image media={item!} />
+                  <Image media={item!} />
                 </ScrollPage>
               ))}
             </ScrollContent>
@@ -176,7 +175,7 @@ const Gallery: React.FC<GalleryProps> = ({ media }) => {
       </Wrapper>
       <Pager current={currentIndex} total={media.length} />
     </Row>
-  )
-}
+  );
+};
 
 export { Gallery };

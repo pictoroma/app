@@ -1,21 +1,23 @@
-import { useAddUserToFeedMutation, useCreateFeedMutation, useRemoveUserFromFeedMutation, useFeedQuery } from '#/hooks/graphql';
+import {
+  useAddUserToFeedMutation,
+  useCreateFeedMutation,
+  useRemoveUserFromFeedMutation,
+  useFeedQuery,
+} from '#/hooks/graphql';
 import { useCallback, useMemo } from 'react';
 
 export const useFeed = (id: string) => {
   const { data, refetch, loading, error } = useFeedQuery({
     variables: { feedId: id },
   });
-  const feed = useMemo(
-    () => data?.feed,
-    [data],
-  );
+  const feed = useMemo(() => data?.feed, [data]);
   return {
     feed,
     refetch,
     loading,
     error,
   };
-}
+};
 
 const useCreateFeed = () => {
   const [createFeedMutation] = useCreateFeedMutation();
@@ -24,10 +26,10 @@ const useCreateFeed = () => {
       await createFeedMutation({
         variables: {
           name,
-        }
-      })
+        },
+      });
     },
-    [createFeedMutation],
+    [createFeedMutation]
   );
 
   return createFeed;
@@ -45,11 +47,11 @@ const useAddUserToFeed = () => {
         },
       });
     },
-    [addUserToFeedMutation],
+    [addUserToFeedMutation]
   );
 
   return addUserToFeed;
-}
+};
 
 const useRemoveUserFromFeed = () => {
   const [removeUserFromFeedMutation] = useRemoveUserFromFeedMutation();
@@ -62,10 +64,10 @@ const useRemoveUserFromFeed = () => {
         },
       });
     },
-    [removeUserFromFeedMutation],
+    [removeUserFromFeedMutation]
   );
 
   return removeUserFromFeed;
-}
+};
 
 export { useCreateFeed, useAddUserToFeed, useRemoveUserFromFeed };

@@ -14,7 +14,7 @@ const darkTheme: Theme = {
     shade: '#000',
     text: '#fff',
     textShade: '#666',
-  }
+  },
 };
 
 export default darkTheme;

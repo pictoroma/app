@@ -26,4 +26,3 @@ const PlaceholderIcon: React.FC<Props> = ({
 );
 
 export { PlaceholderIcon };
-

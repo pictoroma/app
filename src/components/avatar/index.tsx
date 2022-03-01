@@ -5,7 +5,7 @@ import { Image } from '../Image';
 type Props = {
   mediaId?: string;
   onPress?: () => void;
-}
+};
 
 const Touchable = styled.TouchableOpacity``;
 const Wrapper = styled.View`
@@ -16,12 +16,9 @@ const Wrapper = styled.View`
   overflow: hidden;
   align-items: center;
   justify-content: center;
-`
+`;
 
-const Avatar: React.FC<Props> = ({
-  mediaId,
-  onPress,
-}) => {
+const Avatar: React.FC<Props> = ({ mediaId, onPress }) => {
   const content = (
     <Wrapper>
       {mediaId ? (
@@ -33,13 +30,9 @@ const Avatar: React.FC<Props> = ({
   );
 
   if (onPress) {
-    return (
-      <Touchable onPress={onPress}>
-        {content}
-      </Touchable>
-    );
+    return <Touchable onPress={onPress}>{content}</Touchable>;
   }
   return content;
-}
+};
 
-export { Avatar }
+export { Avatar };

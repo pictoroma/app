@@ -37,7 +37,7 @@ const Header: React.FC<Props> = ({ title, back, actions, right }) => {
           (actions || right) && (
             <>
               {actions &&
-                actions.map((action) => (
+                actions.map(action => (
                   <Button
                     key={action.title}
                     title={action.title}
@@ -56,4 +56,3 @@ const Header: React.FC<Props> = ({ title, back, actions, right }) => {
 };
 
 export { Header };
-

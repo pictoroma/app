@@ -30,38 +30,36 @@ const Wrapper = styled.View`
 
 function Group<T = any>(props: ListProps<T> | ChildProps) {
   const [visible, setVisible] = useState(true);
-  const {
-    title,
-    items,
-    getKey,
-    render,
-    add,
-    children,
-  } = props as ListProps<T> & ChildProps;
+  const { title, items, getKey, render, add, children } =
+    props as ListProps<T> & ChildProps;
   return (
     <Row>
       <Wrapper>
         <Header
-          left={(
+          left={
             <Icon name={visible ? 'chevron-down' : 'chevron-up'} size={18} />
-          )}
+          }
           title={title}
           add={add}
           onPress={() => setVisible(!visible)}
         />
-        {visible && items && items.map((item) => (
-          <Fragment key={getKey(item)}>{render(item)}</Fragment>
-        ))}
+        {visible &&
+          items &&
+          items.map(item => (
+            <Fragment key={getKey(item)}>{render(item)}</Fragment>
+          ))}
         {visible && children}
-        {visible && (!children && (!items || items.length === 0)) && (
+        {visible && !children && (!items || items.length === 0) && (
           <Row
-            left={(
+            left={
               <Cell>
                 <Icon color="textShade" name="maximize" />
               </Cell>
-            )}
+            }
           >
-            <Body1 style={{ marginLeft: 10 }} color="textShade">Empty</Body1>
+            <Body1 style={{ marginLeft: 10 }} color="textShade">
+              Empty
+            </Body1>
           </Row>
         )}
       </Wrapper>

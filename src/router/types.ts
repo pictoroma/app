@@ -5,7 +5,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type ProfileParamList = {
   ProfileMain: {};
   Feeds: {};
-}
+};
 
 export type TabParamList = {
   Feed: {};
@@ -16,7 +16,7 @@ export type TabParamList = {
 export type RootStackParamList = {
   Main: {};
   FeedEdit: {
-    id: string
+    id: string;
   };
   Login: {};
   AcceptInvitation: {
@@ -29,11 +29,20 @@ export type MainStackProps = NativeStackScreenProps<RootStackParamList, 'Main'>;
 export type TabStackProps = CompositeScreenProps<
   BottomTabScreenProps<TabParamList>,
   MainStackProps
->
+>;
 
-export type FeedEditScreenNavigationProp = NativeStackScreenProps<RootStackParamList, 'FeedEdit'>;
-export type LoginScreenNavigationProp = NativeStackScreenProps<RootStackParamList, 'Login'>;
-export type AcceptInvitationScreenNavigationProp = NativeStackScreenProps<RootStackParamList, 'AcceptInvitation'>;
+export type FeedEditScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'FeedEdit'
+>;
+export type LoginScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'Login'
+>;
+export type AcceptInvitationScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'AcceptInvitation'
+>;
 
 export type FeedScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList, 'Profile'>,

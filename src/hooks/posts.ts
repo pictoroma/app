@@ -1,20 +1,23 @@
-import { ServerContext } from "#/context/server";
-import { useCallback, useContext, useMemo } from "react";
-import { useCreatePostMutation, usePostsQuery, useProfileFeedsQuery } from "./graphql"
-import { useCreateMedia } from "./media";
+import { ServerContext } from '#/context/server';
+import { useCallback, useContext, useMemo } from 'react';
+import {
+  useCreatePostMutation,
+  usePostsQuery,
+  useProfileFeedsQuery,
+} from './graphql';
+import { useCreateMedia } from './media';
 
 export type UploadFile = {
   uri: string;
   name: string;
   type: string;
-}
-
+};
 
 export const useCreatePostData = () => {
   const { data, refetch, loading, error } = useProfileFeedsQuery();
   const feeds = useMemo(
     () => data?.profile?.feeds.filter(f => f.accessType === 'admin'),
-    [data],
+    [data]
   );
 
   return {
@@ -23,7 +26,7 @@ export const useCreatePostData = () => {
     loading,
     error,
   };
-}
+};
 
 export const useCreatePost = () => {
   const { domain, token } = useContext(ServerContext);
@@ -40,13 +43,13 @@ export const useCreatePost = () => {
             media: ids,
           },
         },
-      }) 
+      });
     },
-    [createPostMutation, token, domain],
+    [createPostMutation, token, domain]
   );
 
   return createPost;
-}
+};
 
 export const useFeed = (feeds?: string[]) => {
   const { data, ...props } = usePostsQuery({
@@ -59,14 +62,10 @@ export const useFeed = (feeds?: string[]) => {
 
   console.log(props.error);
 
-  const posts = useMemo(
-    () => data?.posts || [],
-    [data],
-  );
+  const posts = useMemo(() => data?.posts || [], [data]);
 
   return {
     ...props,
     posts,
   };
-}
-
+};

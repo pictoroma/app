@@ -15,13 +15,15 @@ function Header({ title, add, onPress, left }: Props) {
       onPress={onPress}
       left={left}
       title={title}
-      right={add && (
-        <Cell onPress={add}>
-          <Icon name="plus-circle" size={18} />
-        </Cell>
-      )}
+      right={
+        add && (
+          <Cell onPress={add}>
+            <Icon name="plus-circle" size={18} />
+          </Cell>
+        )
+      }
     />
   );
-};
+}
 
 export { Header };

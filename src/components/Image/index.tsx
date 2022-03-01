@@ -20,15 +20,15 @@ const ImageWrapper = styled.Image`
 `;
 
 type Props = {
-  media: DeepPartial<MediaModel>
-}
+  media: DeepPartial<MediaModel>;
+};
 const Image: React.FC<Props> = ({ media }) => {
   const { domain, token } = useContext(ServerContext);
   const [width, setWidth] = useState<number>(0);
   return (
     <Wrapper
       height={width / media.aspect!}
-      onLayout={(evt) => {
+      onLayout={evt => {
         const currentWidth = evt.nativeEvent.layout.width;
         if (currentWidth !== width) {
           setWidth(currentWidth);
@@ -40,11 +40,11 @@ const Image: React.FC<Props> = ({ media }) => {
           uri: `${domain}/api/thumb/${media.id!}?width=${width * 2}`,
           headers: {
             Authorization: `Bearer ${token}`,
-          }
+          },
         }}
       />
     </Wrapper>
-  )
+  );
 };
 
 export { Image };
