@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components/native';
-import { ListRenderItem, FlatList, RefreshControl } from 'react-native';
+import { ListRenderItem, FlatList, RefreshControl, Dimensions } from 'react-native';
+import MasonryList from '@react-native-seoul/masonry-list';
 import { AddScreenNavigationProp } from '#/router/types';
 import { useFeed } from '#/hooks/posts';
 import { Page } from '#/components/Page';
@@ -27,6 +28,10 @@ const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
   const { feeds } = useProfile();
 
   const userFeeds = useMemo(() => feeds.map(f => f.feed), [feeds]);
+  const columns = useMemo(
+    () => Math.ceil(Dimensions.get('window').width / 500),
+    [],
+  );
 
   const renderItem: ListRenderItem<typeof posts[0]> = useCallback(
     ({ item }) => <PostRow key={item.id} post={item} />,
@@ -58,11 +63,12 @@ const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
   return (
     <Page>
       <Wrapper>
-        <FlatList
+        <MasonryList
           ListHeaderComponent={<ListHeader />}
           data={posts}
-          keyExtractor={item => item.id}
+          keyExtractor={(item: any) => item.id}
           renderItem={renderItem}
+          numColumns={columns}
           ItemSeparatorComponent={Seperator}
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={refetch} />
