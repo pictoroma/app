@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
 export const registerForPushNotificationsAsync = async () => {
-  if (Device.isDevice) {
+  if (Device.isDevice && Platform.OS !== 'web') {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -25,7 +25,5 @@ export const registerForPushNotificationsAsync = async () => {
       });
     }
     return token;
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
+  };
 };

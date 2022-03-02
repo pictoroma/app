@@ -39,7 +39,7 @@ const ServerProvider: React.FC = ({ children }) => {
 
   const login = useCallback(
     async (domain: string, username: string, secret: string) => {
-      const authUrl = `${domain}/api/authorize`;
+      const authUrl = `${domain}/graphql`;
       const response = await fetch(authUrl, {
         method: 'post',
         headers: {
@@ -47,13 +47,24 @@ const ServerProvider: React.FC = ({ children }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username,
-          secret,
+          query: `
+            mutation CreateAuthToken($secret: String!, $username: String!) {
+              createAuthToken(secret: $secret, username: $username)
+            } 
+          `,
+          variables: {
+            username,
+            secret,
+          },
         }),
       });
       const json = await response.json();
+      if (!response.ok) {
+        setError(json.errors);
+        throw new Error('failed');
+      }
       const context = {
-        token: json.token,
+        token: json.data.createAuthToken,
         domain,
       };
       setContext(context);

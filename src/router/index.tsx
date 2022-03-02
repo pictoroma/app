@@ -162,7 +162,7 @@ const Router: React.FC<RouterProps> = ({ colorScheme }) => {
   );
   return (
     <>
-      <NavigationContainer linking={linkingConfig} theme={navigationTheme}>
+      <NavigationContainer theme={navigationTheme}>
         <Root />
       </NavigationContainer>
     </>

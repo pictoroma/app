@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { DeepPartial } from '#/helpers/types';
 import { MediaModel } from '#/hooks/graphql';
+import axios from 'axios';
 
 const Wrapper = styled.View<{
   height: number;
@@ -26,13 +27,13 @@ const Image: React.FC<Props> = ({ media }) => {
   const [width, setWidth] = useState<number>(0);
   useEffect(() => {
     const run = async () => {
-      const response = await fetch(`${domain}/api/thumb/${media.id!}`, {
-        method: 'GET',
-        headers: {
-          Authorization: token,
-        },
-      });
-      console.log(response.ok);
+      // const response = await axios.get(`${domain}/api/thumb/${media.id!}`, {
+      //   withCredentials: true,
+      //   headers: {
+      //     Authorization: token!,
+      //   },
+      // });
+      // console.log(response.data);
     };
     run();
   }, [domain, token, media.id]);

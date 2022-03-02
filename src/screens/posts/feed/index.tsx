@@ -4,7 +4,7 @@ import { ListRenderItem, FlatList, RefreshControl } from 'react-native';
 import { AddScreenNavigationProp } from '#/router/types';
 import { useFeed } from '#/hooks/posts';
 import { Page } from '#/components/Page';
-import { Cell, Icon, PostFilter, PostRow } from '#/components';
+import { PostFilter, PostRow } from '#/components';
 import { Header } from '#/components';
 import { useProfile } from '#/hooks/profile';
 
@@ -16,6 +16,7 @@ const Seperator = styled.View`
 `;
 const Wrapper = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
+  flex: 1;
 `;
 
 const FeedScreen: React.FC<AddScreenNavigationProp> = () => {

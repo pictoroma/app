@@ -33,6 +33,7 @@ const PostFilter: React.FC<PostFilterProps> = ({
           const isSelected = selected.includes(feed.id);
           return (
             <Row
+              key={feed.id}
               onPress={
                 isSelected
                   ? () => onSelect(selected.filter(s => s !== feed.id))

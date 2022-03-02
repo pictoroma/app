@@ -5,7 +5,25 @@ on:
     branches:
       - main
 jobs:
-  publish:
+  publish-web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          persist-credentials: false
+
+      - name: Install and Build 🔧
+        run: |
+          yarn install
+          yarn expo build:web
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: web-build 
+  publish-native:
     name: Install and publish
     runs-on: ubuntu-latest
     steps:

@@ -3,7 +3,7 @@ import { useCallback, useContext, useMemo } from 'react';
 import {
   useCreatePostMutation,
   usePostsQuery,
-  useProfileFeedsQuery,
+  useProfileQuery,
 } from './graphql';
 import { useCreateMedia } from './media';
 
@@ -14,7 +14,7 @@ export type UploadFile = {
 };
 
 export const useCreatePostData = () => {
-  const { data, refetch, loading, error } = useProfileFeedsQuery();
+  const { data, refetch, loading, error } = useProfileQuery();
   const feeds = useMemo(
     () => data?.profile?.feeds.filter(f => f.accessType === 'admin'),
     [data]
