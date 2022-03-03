@@ -1,0 +1,5 @@
+mutation CreateComment($params: CommentCreateParameters!) {
+  createComment(params: $params) {
+    id
+  }
+}

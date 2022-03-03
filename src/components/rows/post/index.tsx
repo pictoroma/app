@@ -6,6 +6,9 @@ import { Icon } from '#/components';
 import { Gallery } from '#/components/gallery';
 import { Body1 } from '#/typography';
 import { Avatar } from '#/components/avatar';
+import { useNavigation } from '@react-navigation/native';
+import { Popup } from '#/components/Popup';
+import { useState } from 'react';
 
 type PostRowProps = {
   post: DeepPartial<PostModel>;
@@ -14,6 +17,8 @@ type PostRowProps = {
 const Wrapper = styled.View``;
 
 const PostRow: React.FC<PostRowProps> = ({ post }) => {
+  const navigation = useNavigation();
+  const [menuVisible, setMenuVisible] = useState(false);
   return (
     <Wrapper>
       {post.media && <Gallery media={post!.media} />}
@@ -24,14 +29,14 @@ const PostRow: React.FC<PostRowProps> = ({ post }) => {
           </Cell>
         }
         right={
-          false && (
+          (
             <>
-              <Cell>
+              <Cell onPress={() => navigation.navigate('Comments', { id: post.id })}>
                 <Icon name="message-circle" color="text" size={20} />
-                <Body1>0</Body1>
+                <Body1>{post.commentCount}</Body1>
               </Cell>
-              <Cell>
-                <Icon name="bookmark" color="text" size={20} />
+              <Cell onPress={() => setMenuVisible(true)}>
+                <Icon name="more-horizontal" color="text" size={20} />
               </Cell>
             </>
           )
@@ -39,6 +44,8 @@ const PostRow: React.FC<PostRowProps> = ({ post }) => {
         description={post.body}
         overline={post.creator?.name || post.creator?.username}
       />
+      <Popup onClose={() => setMenuVisible(false)} visible={menuVisible}>
+      </Popup>
     </Wrapper>
   );
 };

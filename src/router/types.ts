@@ -18,6 +18,9 @@ export type RootStackParamList = {
   FeedEdit: {
     id: string;
   };
+  Comments: {
+    id: string;
+  };
   Login: {};
   AcceptInvitation: {
     inviteCode: string;
@@ -42,6 +45,11 @@ export type LoginScreenNavigationProp = NativeStackScreenProps<
 export type AcceptInvitationScreenNavigationProp = NativeStackScreenProps<
   RootStackParamList,
   'AcceptInvitation'
+>;
+
+export type CommentsScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'Comments' 
 >;
 
 export type FeedScreenNavigationProp = CompositeScreenProps<

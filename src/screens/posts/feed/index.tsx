@@ -38,9 +38,9 @@ const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
     []
   );
 
-  const ListHeader = useMemo(
-    () => () =>
-      (
+  return (
+    <Page>
+      <Wrapper>
         <Header
           key="test"
           title="All posts"
@@ -56,15 +56,7 @@ const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
             </>
           }
         />
-      ),
-    [userFeeds, selectedFeeds, setSelectedFeeds]
-  );
-
-  return (
-    <Page>
-      <Wrapper>
         <MasonryList
-          ListHeaderComponent={<ListHeader />}
           data={posts}
           keyExtractor={(item: any) => item.id}
           renderItem={renderItem}

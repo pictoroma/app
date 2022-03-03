@@ -1,7 +1,41 @@
+query Post($postId: String!) {
+  post(id: $postId) {
+    id,
+    creator {
+      id,
+      name,
+      avatar,
+      username,
+    }
+    created
+    comments {
+      id
+      creator {
+        username
+        name
+        id
+        avatar
+      }
+      content
+      created
+    }
+    media {
+      id
+      contentType
+      lowres
+      aspect
+      order
+      created
+      type
+    }
+  }
+}
+
 query Posts($filter: PostFindParameters!) {
   posts(filter: $filter) {
     id
     body
+    commentCount
     creator {
       name
       username

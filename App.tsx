@@ -1,9 +1,10 @@
 import { Image } from 'react-native';
 
-Image.getSizeWithHeaders = (uri, headers, success, failed) => {
-  success(100, 100);
-};
-console.log('foo', Image);
+if (!Image.getSizeWithHeaders) {
+  Image.getSizeWithHeaders = (uri, headers, success, failed) => {
+    success(100, 100);
+  };
+}
 
 import App from './src/App';
 

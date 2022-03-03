@@ -19,6 +19,7 @@ import { ServerContext } from '#/context/server';
 import { LoginScreen } from '#/screens/login/login';
 import { useProfile } from '#/hooks/profile';
 import { AcceptInvitationScreen } from '#/screens/login/accept-invitation';
+import { CommentsScreen } from '#/screens/comments';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const TabStack = createBottomTabNavigator<TabParamList>();
@@ -122,6 +123,7 @@ const Root = () => {
             }}
           >
             <RootStack.Screen name="FeedEdit" component={FeedEditScreen} />
+            <RootStack.Screen name="Comments" component={CommentsScreen} />
           </RootStack.Group>
         </>
       ) : (

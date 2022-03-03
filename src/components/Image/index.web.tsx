@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { DeepPartial } from '#/helpers/types';
 import { MediaModel } from '#/hooks/graphql';
-import axios from 'axios';
 
 const Wrapper = styled.View<{
   height: number;
@@ -25,15 +24,19 @@ type Props = {
 const Image: React.FC<Props> = ({ media }) => {
   const { domain, token } = useContext(ServerContext);
   const [width, setWidth] = useState<number>(0);
+  const [url, setUrl] = useState<string>();
   useEffect(() => {
     const run = async () => {
-      // const response = await axios.get(`${domain}/api/thumb/${media.id!}`, {
-      //   withCredentials: true,
-      //   headers: {
-      //     Authorization: token!,
-      //   },
-      // });
-      // console.log(response.data);
+      const response = await fetch(`${domain}/api/thumb/${media.id!}`, {
+        headers: {
+          Authorization: `bearer ${token!}`,
+        },
+      });
+      const binaryData = await response.arrayBuffer();
+      const contentType = response.headers.get('content-type');
+      const base64 = Buffer.from(binaryData).toString('base64');
+      const dataUrl = `data:${contentType || 'image/jpeg'};base64,${base64}`;
+      setUrl(dataUrl);
     };
     run();
   }, [domain, token, media.id]);
@@ -47,7 +50,7 @@ const Image: React.FC<Props> = ({ media }) => {
         }
       }}
     >
-      <ImageWrapper />
+      <ImageWrapper source={{ uri: url }} />
     </Wrapper>
   );
 };

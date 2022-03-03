@@ -48,10 +48,12 @@ export type MediaModel = {
   __typename?: 'MediaModel';
   aspect?: Maybe<Scalars['Float']>;
   contentType?: Maybe<Scalars['String']>;
+  created?: Maybe<Scalars['DateTime']>;
   creator: UserModel;
   filename?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   lowres?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['Float']>;
   size: Scalars['Float'];
   type?: Maybe<Scalars['String']>;
 };
@@ -134,6 +136,7 @@ export type PostFindParameters = {
 export type PostModel = {
   __typename?: 'PostModel';
   body?: Maybe<Scalars['String']>;
+  commentCount: Scalars['Float'];
   comments: Array<CommentModel>;
   created: Scalars['DateTime'];
   creator?: Maybe<UserModel>;
@@ -190,6 +193,13 @@ export type UserModel = {
   username: Scalars['String'];
 };
 
+export type CreateCommentMutationVariables = Exact<{
+  params: CommentCreateParameters;
+}>;
+
+
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'CommentModel', id: string } };
+
 export type FeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -226,12 +236,19 @@ export type RemoveUserFromFeedMutationVariables = Exact<{
 
 export type RemoveUserFromFeedMutation = { __typename?: 'Mutation', removeUserFromFeed: boolean };
 
+export type PostQueryVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type PostQuery = { __typename?: 'Query', post: { __typename?: 'PostModel', id: string, created: any, creator?: { __typename?: 'UserModel', id: string, name?: string | null, avatar?: string | null, username: string } | null, comments: Array<{ __typename?: 'CommentModel', id: string, content: string, created: any, creator: { __typename?: 'UserModel', username: string, name?: string | null, id: string, avatar?: string | null } }>, media: Array<{ __typename?: 'MediaModel', id: string, contentType?: string | null, lowres?: string | null, aspect?: number | null, order?: number | null, created?: any | null, type?: string | null }> } };
+
 export type PostsQueryVariables = Exact<{
   filter: PostFindParameters;
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'PostModel', id: string, body?: string | null, created: any, creator?: { __typename?: 'UserModel', name?: string | null, username: string, avatar?: string | null } | null, media: Array<{ __typename?: 'MediaModel', id: string, aspect?: number | null, type?: string | null }> }> };
+export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'PostModel', id: string, body?: string | null, commentCount: number, created: any, creator?: { __typename?: 'UserModel', name?: string | null, username: string, avatar?: string | null } | null, media: Array<{ __typename?: 'MediaModel', id: string, aspect?: number | null, type?: string | null }> }> };
 
 export type CreatePostMutationVariables = Exact<{
   params: PostCreateParameters;
@@ -265,6 +282,39 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'UserModel', id: string, name?: string | null, username: string, avatar?: string | null }> };
 
 
+export const CreateCommentDocument = gql`
+    mutation CreateComment($params: CommentCreateParameters!) {
+  createComment(params: $params) {
+    id
+  }
+}
+    `;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      params: // value for 'params'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+      }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const FeedsDocument = gql`
     query Feeds {
   feeds {
@@ -451,11 +501,74 @@ export function useRemoveUserFromFeedMutation(baseOptions?: Apollo.MutationHookO
 export type RemoveUserFromFeedMutationHookResult = ReturnType<typeof useRemoveUserFromFeedMutation>;
 export type RemoveUserFromFeedMutationResult = Apollo.MutationResult<RemoveUserFromFeedMutation>;
 export type RemoveUserFromFeedMutationOptions = Apollo.BaseMutationOptions<RemoveUserFromFeedMutation, RemoveUserFromFeedMutationVariables>;
+export const PostDocument = gql`
+    query Post($postId: String!) {
+  post(id: $postId) {
+    id
+    creator {
+      id
+      name
+      avatar
+      username
+    }
+    created
+    comments {
+      id
+      creator {
+        username
+        name
+        id
+        avatar
+      }
+      content
+      created
+    }
+    media {
+      id
+      contentType
+      lowres
+      aspect
+      order
+      created
+      type
+    }
+  }
+}
+    `;
+
+/**
+ * __usePostQuery__
+ *
+ * To run a query within a React component, call `usePostQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function usePostQuery(baseOptions: Apollo.QueryHookOptions<PostQuery, PostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostQuery, PostQueryVariables>(PostDocument, options);
+      }
+export function usePostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostQuery, PostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostQuery, PostQueryVariables>(PostDocument, options);
+        }
+export type PostQueryHookResult = ReturnType<typeof usePostQuery>;
+export type PostLazyQueryHookResult = ReturnType<typeof usePostLazyQuery>;
+export type PostQueryResult = Apollo.QueryResult<PostQuery, PostQueryVariables>;
 export const PostsDocument = gql`
     query Posts($filter: PostFindParameters!) {
   posts(filter: $filter) {
     id
     body
+    commentCount
     creator {
       name
       username
