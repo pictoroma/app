@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components/native';
-import { ListRenderItem, FlatList, RefreshControl, Dimensions } from 'react-native';
+import { ListRenderItem, RefreshControl, Dimensions } from 'react-native';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { AddScreenNavigationProp } from '#/router/types';
 import { useFeed } from '#/hooks/posts';
@@ -21,10 +21,7 @@ const Wrapper = styled.View`
 `;
 
 const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
-  const [selectedFeeds, setSelectedFeeds] = useState<string[]>([]);
-  const { posts, loading, refetch } = useFeed(
-    selectedFeeds.length > 0 ? selectedFeeds : undefined
-  );
+  const { posts, loading, refetch, feeds: selectedFeeds, setFeeds: setSelectedFeeds } = useFeed();
   const { feeds } = useProfile();
 
   const userFeeds = useMemo(() => feeds.map(f => f.feed), [feeds]);
@@ -34,8 +31,8 @@ const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
   );
 
   const renderItem: ListRenderItem<typeof posts[0]> = useCallback(
-    ({ item }) => <PostRow key={item.id} post={item} />,
-    []
+    ({ item }) => <PostRow fullWidth={columns <= 1} key={item.id} post={item} />,
+    [columns]
   );
 
   return (

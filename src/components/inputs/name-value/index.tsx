@@ -1,4 +1,5 @@
-import { Row, Dialog } from '#/components';
+import { Row } from '#/components/Row';
+import { Dialog } from '#/components/Dialog';
 import { Body1 } from '#/typography';
 import { useState } from 'react';
 

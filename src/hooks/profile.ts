@@ -1,5 +1,6 @@
-import { useCallback, useMemo } from 'react';
-import { useProfileQuery, useSetProfileAvatarMutation } from './graphql';
+import { ProfileContext } from '#/context/profile';
+import { useCallback, useContext } from 'react';
+import { useSetProfileAvatarMutation } from './graphql';
 import { useCreateMedia } from './media';
 import { UploadFile } from './posts';
 
@@ -20,15 +21,6 @@ export const useSetAvatar = () => {
 };
 
 export const useProfile = () => {
-  const { data, refetch, loading, error } = useProfileQuery();
-  const feeds = useMemo(() => data?.profile?.feeds || [], [data]);
-  const profile = useMemo(() => data?.profile, [data]);
-
-  return {
-    profile,
-    feeds,
-    refetch,
-    loading,
-    error,
-  };
+  const context = useContext(ProfileContext);
+  return context;
 };

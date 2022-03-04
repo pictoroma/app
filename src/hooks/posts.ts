@@ -1,11 +1,13 @@
+import { HomeContext } from '#/context/home';
 import { ServerContext } from '#/context/server';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
   useCreatePostMutation,
-  usePostsQuery,
   useProfileQuery,
+  useRemovePostMutation,
 } from './graphql';
 import { useCreateMedia } from './media';
+import { useNotifications } from './notifications';
 
 export type UploadFile = {
   uri: string;
@@ -30,7 +32,23 @@ export const useCreatePostData = () => {
 
 export const useCreatePost = () => {
   const { domain, token } = useContext(ServerContext);
-  const [createPostMutation] = useCreatePostMutation();
+  const { show, dismiss } = useNotifications();
+  const [createPostMutation, { error }] = useCreatePostMutation();
+  useEffect(
+    () => {
+      if (!error) {
+        return;
+      } 
+      const id = show({
+        type: 'error',
+        text: error.message,
+      });
+      return () => {
+        dismiss(id);
+      }
+    },
+    [error, show, dismiss],
+  )
   const createMedia = useCreateMedia();
   const createPost = useCallback(
     async (feed: string, body: string, media: UploadFile[]) => {
@@ -51,21 +69,45 @@ export const useCreatePost = () => {
   return createPost;
 };
 
-export const useFeed = (feeds?: string[]) => {
-  const { data, ...props } = usePostsQuery({
-    variables: {
-      filter: {
-        feeds,
-      },
+export const useRemovePost = () => {
+  const [loading, setLoading] = useState(false);
+  const { refetch } = useFeed();
+  const [removePostMutation, { error }] = useRemovePostMutation();
+  const { show, dismiss } = useNotifications();
+  useEffect(
+    () => {
+      if (!error) {
+        return;
+      } 
+      const id = show({
+        type: 'error',
+        text: error.message,
+      });
+      return () => {
+        dismiss(id);
+      }
     },
-  });
+    [error, show, dismiss],
+  )
+  const removePost = useCallback(
+    async (id: string) => {
+      setLoading(true);
+      try {
+        await removePostMutation({
+          variables: { removePostId: id },
+        });
+        await refetch();
+      } finally {
+        setLoading(false);
+      }
+    },
+    [removePostMutation],
+  )
 
-  console.log(props.error);
+  return { removePost, loading };
+};
 
-  const posts = useMemo(() => data?.posts || [], [data]);
-
-  return {
-    ...props,
-    posts,
-  };
+export const useFeed = () => {
+  const context = useContext(HomeContext);
+  return context;
 };

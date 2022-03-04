@@ -67,6 +67,7 @@ export type Mutation = {
   createPost: PostModel;
   inviteProfile: UserModel;
   registerPushNotification: PushRegistrationModel;
+  removePost: Scalars['Boolean'];
   removeUserFromFeed: Scalars['Boolean'];
   setProfileAvatar: UserModel;
 };
@@ -107,6 +108,11 @@ export type MutationInviteProfileArgs = {
 
 export type MutationRegisterPushNotificationArgs = {
   token: Scalars['String'];
+};
+
+
+export type MutationRemovePostArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -256,6 +262,13 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'PostModel', id: string } };
+
+export type RemovePostMutationVariables = Exact<{
+  removePostId: Scalars['String'];
+}>;
+
+
+export type RemovePostMutation = { __typename?: 'Mutation', removePost: boolean };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -644,6 +657,37 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const RemovePostDocument = gql`
+    mutation RemovePost($removePostId: String!) {
+  removePost(id: $removePostId)
+}
+    `;
+export type RemovePostMutationFn = Apollo.MutationFunction<RemovePostMutation, RemovePostMutationVariables>;
+
+/**
+ * __useRemovePostMutation__
+ *
+ * To run a mutation, you first call `useRemovePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemovePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removePostMutation, { data, loading, error }] = useRemovePostMutation({
+ *   variables: {
+ *      removePostId: // value for 'removePostId'
+ *   },
+ * });
+ */
+export function useRemovePostMutation(baseOptions?: Apollo.MutationHookOptions<RemovePostMutation, RemovePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemovePostMutation, RemovePostMutationVariables>(RemovePostDocument, options);
+      }
+export type RemovePostMutationHookResult = ReturnType<typeof useRemovePostMutation>;
+export type RemovePostMutationResult = Apollo.MutationResult<RemovePostMutation>;
+export type RemovePostMutationOptions = Apollo.BaseMutationOptions<RemovePostMutation, RemovePostMutationVariables>;
 export const ProfileDocument = gql`
     query Profile {
   profile {

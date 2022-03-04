@@ -8,6 +8,7 @@ import { useContext, useMemo, useState } from 'react';
 import { ServerContext } from '#/context/server';
 import { Icon } from '../Icon';
 import { dark } from '#/theme';
+import { useSaveImage } from './save';
 
 const ScrollWrapper = styled.ScrollView<{
   height: number;
@@ -50,7 +51,7 @@ const Dot = styled.View<{
 }>`
   width: 6px;
   height: 6px;
-  background: ${({ selected }) => (selected ? '#000' : '#ccc')};
+  background: ${({ selected, theme }) => (selected ? theme.colors.primary : '#ccc')};
   margin: 0 5px;
   border-radius: 3px;
 `;
@@ -77,6 +78,7 @@ type GalleryProps = {
 const Gallery: React.FC<GalleryProps> = ({ media }) => {
   const [width, setWidth] = useState(0);
   const [offset, setOffset] = useState(0);
+  const saveImage = useSaveImage();
   const { domain, token } = useContext(ServerContext);
   const currentIndex = useMemo(
     () => Math.round(offset / width) || 0,
@@ -115,7 +117,7 @@ const Gallery: React.FC<GalleryProps> = ({ media }) => {
         <ThemeProvider theme={dark}>
           <Row
             right={
-              <Cell>
+              <Cell onPress={() => saveImage(lightboxImages[currentIndex].uri)}>
                 <Icon name="download" />
               </Cell>
             }

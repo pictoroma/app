@@ -28,10 +28,6 @@ const GraphQLProvider: React.FC = ({ children }) => {
     });
   }, [token, domain]);
 
-  if (!domain) {
-    return <>{children}</>;
-  }
-
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 };
 

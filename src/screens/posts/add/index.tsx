@@ -6,6 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Page, FeedInput, AddImages, Row, Input, Button } from '#/components';
 import { Header } from '#/components';
 import { useProfile } from '#/hooks/profile';
+import { useFeed } from '#/hooks/posts';
 
 const Wrapper = styled.ScrollView`
   flex: 1;
@@ -16,7 +17,9 @@ const Outer = styled.View`
 `;
 
 const AddPostScreen: React.FC<AddScreenNavigationProp> = ({ navigation }) => {
-  const { feeds, refetch } = useProfile();
+  const [loading, setLoading] = useState(false);
+  const { refetch: refetchPosts } = useFeed();
+  const { feeds, refetch, loading: profileLoading } = useProfile();
   const [selectedFeed, setSelectedFeed] = useState<any>();
   const [media, setMedia] = useState<UploadFile[]>([]);
   const [body, setBody] = useState('');
@@ -27,7 +30,10 @@ const AddPostScreen: React.FC<AddScreenNavigationProp> = ({ navigation }) => {
   );
 
   const submit = useCallback(async () => {
+    setLoading(true);
     await createPost(selectedFeed.id, body, media);
+    await refetchPosts();
+    setLoading(false);
     setSelectedFeed(undefined);
     setMedia([]);
     setBody('');
@@ -44,7 +50,7 @@ const AddPostScreen: React.FC<AddScreenNavigationProp> = ({ navigation }) => {
   }
 
   return (
-    <Page>
+    <Page loading={profileLoading || loading}>
       <Outer>
         <Header title="Create post" />
         <Wrapper>

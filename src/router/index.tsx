@@ -20,6 +20,7 @@ import { LoginScreen } from '#/screens/login/login';
 import { useProfile } from '#/hooks/profile';
 import { AcceptInvitationScreen } from '#/screens/login/accept-invitation';
 import { CommentsScreen } from '#/screens/comments';
+import { HomeProvider } from '#/context/home';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const TabStack = createBottomTabNavigator<TabParamList>();
@@ -163,11 +164,11 @@ const Router: React.FC<RouterProps> = ({ colorScheme }) => {
     [baseTheme, theme]
   );
   return (
-    <>
-      <NavigationContainer theme={navigationTheme}>
+    <HomeProvider>
+      <NavigationContainer linking={linkingConfig} theme={navigationTheme}>
         <Root />
       </NavigationContainer>
-    </>
+    </HomeProvider>
   );
 };
 

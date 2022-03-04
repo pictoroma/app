@@ -1,13 +1,8 @@
+import React, { useState } from 'react';
 import { Button } from '#/components/Button';
 import { Icon } from '#/components/Icon';
 import { Popup } from '#/components/Popup';
 import { Cell, Row } from '#/components/Row';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components/native';
-
-const Content = styled.View`
-  min-height: 40%;
-`;
 
 interface PostFilterProps {
   selected?: string[];

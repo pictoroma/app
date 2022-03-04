@@ -55,3 +55,7 @@ mutation CreatePost($params: PostCreateParameters!) {
     id
   }
 }
+
+mutation RemovePost($removePostId: String!) {
+  removePost(id: $removePostId)
+}

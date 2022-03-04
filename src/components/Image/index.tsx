@@ -35,14 +35,16 @@ const Image: React.FC<Props> = ({ media }) => {
         }
       }}
     >
-      <ImageWrapper
-        source={{
-          uri: `${domain}/api/thumb/${media.id!}?width=${width * 2}`,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }}
-      />
+      {!!width && (
+        <ImageWrapper
+          source={{
+            uri: `${domain}/api/thumb/${media.id!}?width=${width * 2}`,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }}
+        />
+      )}
     </Wrapper>
   );
 };

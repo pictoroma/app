@@ -1,3 +1,4 @@
+export * from './loaders';
 export * from './avatar';
 export * from './posts';
 export * from './Button';

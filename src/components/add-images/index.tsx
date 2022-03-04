@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import styled from 'styled-components/native';
 import { UploadFile } from '#/hooks/posts';
-import { Icon } from '#/components';
+import { Icon } from '../Icon';
 import { Row } from '../Row';
 
 type Props = {

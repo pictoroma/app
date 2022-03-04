@@ -8,6 +8,7 @@ const Wrapper = styled.View<{
   height: number;
 }>`
   height: ${({ height }) => height}px;
+  width: 100%;
 `;
 const ImageWrapper = styled.Image`
   position: absolute;

@@ -1,4 +1,5 @@
-import { Row, Dialog } from '#/components';
+import { Row } from '#/components/Row';
+import { Dialog } from '#/components/Dialog';
 import { PartialDeep } from 'type-fest';
 import { UserModel } from '#/hooks/graphql';
 import { Body1 } from '#/typography';

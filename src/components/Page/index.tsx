@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import styled from 'styled-components/native';
 import { Keyboard, Platform } from 'react-native';
+import { OverlayLoader } from '../loaders';
 
 const KeyboardAvoiding = styled.KeyboardAvoidingView`
   flex: 1;
@@ -10,7 +11,12 @@ const Pressable = styled.Pressable`
   flex: 1;
 `;
 
-const Page: React.FC = ({ children }) => {
+type Props = {
+  children: ReactNode;
+  loading?: boolean;
+}
+
+const Page: React.FC<Props> = ({ children, loading }) => {
   const [keyboardShown, setKeyboardShown] = useState(false);
   useEffect(() => {
     const keyboardDidShow = () => setKeyboardShown(true);
@@ -26,6 +32,7 @@ const Page: React.FC = ({ children }) => {
   return (
     <Pressable disabled={!keyboardShown} onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoiding behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        {loading && <OverlayLoader />}
         {children}
       </KeyboardAvoiding>
     </Pressable>

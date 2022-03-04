@@ -100,7 +100,6 @@ const ServerProvider: React.FC = ({ children }) => {
         throw new Error(await response.text());
       }
       const json = await response.json();
-      console.log(json);
       const context = {
         token: json.token,
         domain,
