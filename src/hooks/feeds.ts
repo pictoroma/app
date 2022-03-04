@@ -11,6 +11,7 @@ export const useFeed = (id: string) => {
     variables: { feedId: id },
   });
   const feed = useMemo(() => data?.feed, [data]);
+  console.log(error);
   return {
     feed,
     refetch,

@@ -48,6 +48,8 @@ jobs:
 
       - run: echo $BUILD_VERSION
 
+      - run: eas build -p android --non-interactive
+
       - run: eas build -p ios --non-interactive
         env:
           EXPO_APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
