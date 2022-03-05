@@ -5,23 +5,11 @@ import {
   useFeedQuery,
 } from '#/hooks/graphql';
 import { useCallback, useMemo } from 'react';
-
-export const useFeed = (id: string) => {
-  const { data, refetch, loading, error } = useFeedQuery({
-    variables: { feedId: id },
-  });
-  const feed = useMemo(() => data?.feed, [data]);
-  console.log(error);
-  return {
-    feed,
-    refetch,
-    loading,
-    error,
-  };
-};
+import { useErrorNotification } from './utils';
 
 const useCreateFeed = () => {
-  const [createFeedMutation] = useCreateFeedMutation();
+  const [createFeedMutation, { error }] = useCreateFeedMutation();
+  useErrorNotification(error);
   const createFeed = useCallback(
     async (name: string) => {
       await createFeedMutation({
@@ -37,7 +25,8 @@ const useCreateFeed = () => {
 };
 
 const useAddUserToFeed = () => {
-  const [addUserToFeedMutation] = useAddUserToFeedMutation();
+  const [addUserToFeedMutation, {error}] = useAddUserToFeedMutation();
+  useErrorNotification(error);
   const addUserToFeed = useCallback(
     async (feedId: string, userId: string, accessType: string) => {
       await addUserToFeedMutation({
@@ -55,7 +44,8 @@ const useAddUserToFeed = () => {
 };
 
 const useRemoveUserFromFeed = () => {
-  const [removeUserFromFeedMutation] = useRemoveUserFromFeedMutation();
+  const [removeUserFromFeedMutation, { error }] = useRemoveUserFromFeedMutation();
+  useErrorNotification(error);
   const removeUserFromFeed = useCallback(
     async (feedId: string, userId: string) => {
       await removeUserFromFeedMutation({

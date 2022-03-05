@@ -7,7 +7,7 @@ import {
   useRemovePostMutation,
 } from './graphql';
 import { useCreateMedia } from './media';
-import { useNotifications } from './notifications';
+import { useErrorNotification } from './utils';
 
 export type UploadFile = {
   uri: string;
@@ -17,6 +17,7 @@ export type UploadFile = {
 
 export const useCreatePostData = () => {
   const { data, refetch, loading, error } = useProfileQuery();
+  useErrorNotification(error);
   const feeds = useMemo(
     () => data?.profile?.feeds.filter(f => f.accessType === 'admin'),
     [data]
@@ -32,23 +33,8 @@ export const useCreatePostData = () => {
 
 export const useCreatePost = () => {
   const { domain, token } = useContext(ServerContext);
-  const { show, dismiss } = useNotifications();
   const [createPostMutation, { error }] = useCreatePostMutation();
-  useEffect(
-    () => {
-      if (!error) {
-        return;
-      } 
-      const id = show({
-        type: 'error',
-        text: error.message,
-      });
-      return () => {
-        dismiss(id);
-      }
-    },
-    [error, show, dismiss],
-  )
+  useErrorNotification(error);
   const createMedia = useCreateMedia();
   const createPost = useCallback(
     async (feed: string, body: string, media: UploadFile[]) => {
@@ -73,22 +59,7 @@ export const useRemovePost = () => {
   const [loading, setLoading] = useState(false);
   const { refetch } = useFeed();
   const [removePostMutation, { error }] = useRemovePostMutation();
-  const { show, dismiss } = useNotifications();
-  useEffect(
-    () => {
-      if (!error) {
-        return;
-      } 
-      const id = show({
-        type: 'error',
-        text: error.message,
-      });
-      return () => {
-        dismiss(id);
-      }
-    },
-    [error, show, dismiss],
-  )
+  useErrorNotification(error);
   const removePost = useCallback(
     async (id: string) => {
       setLoading(true);

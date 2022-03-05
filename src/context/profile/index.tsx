@@ -1,5 +1,6 @@
 
 import { useProfileQuery } from '#/hooks/graphql';
+import { useErrorNotification } from '#/hooks/utils';
 import { createContext, useMemo, useState } from 'react';
 
 type BaseType = ReturnType<typeof useProfileQuery>;
@@ -16,6 +17,7 @@ const ProfileProvider: React.FC = ({ children }) => {
     variables: {
     },
   });
+  useErrorNotification(props.error);
 
   const feeds = useMemo(() => data?.profile?.feeds || [], [data]);
   const profile = useMemo(() => data?.profile, [data]);

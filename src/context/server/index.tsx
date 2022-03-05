@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { Buffer } from 'buffer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { registerForPushNotificationsAsync } from './push';
+import { useNotifications } from '#/hooks/notifications';
 
 const STORAGE_KEY = '_/server';
 type ServerContextValue = {
@@ -22,7 +23,7 @@ const ServerContext = createContext<ServerContextValue>(undefined as any);
 
 const ServerProvider: React.FC = ({ children }) => {
   const [context, setContext] = useState<{ domain: string; token: string }>();
-  const [error, setError] = useState<any>();
+  const { show, dismiss } = useNotifications();
   const [pushToken, setPushToken] = useState<string>();
   const [ready, setReady] = useState(false);
   const logout = useCallback(async () => {
@@ -58,11 +59,14 @@ const ServerProvider: React.FC = ({ children }) => {
           },
         }),
       });
-      const json = await response.json();
       if (!response.ok) {
-        setError(json.errors);
+        show({
+          type: 'error',
+          text: await response.text(),
+        });
         throw new Error('failed');
       }
+      const json = await response.json();
       const context = {
         token: json.data.createAuthToken,
         domain,
@@ -70,7 +74,7 @@ const ServerProvider: React.FC = ({ children }) => {
       setContext(context);
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(context));
     },
-    []
+    [show]
   );
 
   const acceptInvitation = useCallback(
@@ -115,20 +119,31 @@ const ServerProvider: React.FC = ({ children }) => {
       const item = await AsyncStorage.getItem(STORAGE_KEY);
       if (item) {
         const nextContext = JSON.parse(item) as ServerContextValue;
-        const configResponse = await fetch(`${nextContext.domain}/api/config`, {
-          headers: {
-            Authorization: `Bearer ${nextContext.token}`,
-          },
-        });
-        if (configResponse.ok) {
-          setContext(JSON.parse(item));
+        try {
+          const configResponse = await fetch(`${nextContext.domain}/api/config`, {
+            headers: {
+              Authorization: `Bearer ${nextContext.token}`,
+            },
+          });
+          if (configResponse.ok) {
+            setContext(JSON.parse(item));
+          } else {
+            show({
+              type: 'error',
+              text: await configResponse.text(),
+            });     
+          }
+        } catch(err) {
+          show({
+            type: 'error',
+            text: err.message,
+          });     
         }
       }
       setReady(true);
     };
-    run().catch(err => {
+    run().catch(() => {
       setReady(true);
-      setError(err);
     });
   }, []);
 

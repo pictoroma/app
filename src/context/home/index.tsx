@@ -1,4 +1,5 @@
 import { usePostsQuery } from '#/hooks/graphql';
+import { useErrorNotification } from '#/hooks/utils';
 import { createContext, useMemo, useState } from 'react';
 
 type BaseType = ReturnType<typeof usePostsQuery>;
@@ -20,6 +21,7 @@ const HomeProvider: React.FC = ({ children }) => {
       },
     },
   });
+  useErrorNotification(props.error);
 
   const posts = useMemo(() => data?.posts || [], [data]);
 

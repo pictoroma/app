@@ -1,3 +1,4 @@
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useColorScheme } from './hooks/colors';
 import { ThemeProvider } from 'styled-components/native';
@@ -14,16 +15,16 @@ export default function App() {
   return (
     <ThemeProvider theme={colorScheme === 'dark' ? dark : light}>
       <SafeAreaProvider>
-        <ServerProvider>
-          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-          <GraphQLProvider>
-            <NotificationProvider>
+        <NotificationProvider>
+          <ServerProvider>
+            <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+            <GraphQLProvider>
               <ProfileProvider>
                 <Router colorScheme={colorScheme} />
               </ProfileProvider>
-            </NotificationProvider>
-          </GraphQLProvider>
-        </ServerProvider>
+            </GraphQLProvider>
+          </ServerProvider>
+        </NotificationProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );
