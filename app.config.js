@@ -49,6 +49,9 @@ const config = {
       postPublish: [
         {
           file: 'sentry-expo/upload-sourcemaps',
+          config: {
+            setCommits: true,
+          },
         },
       ],
     },
