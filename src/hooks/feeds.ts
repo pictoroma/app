@@ -7,6 +7,21 @@ import {
 import { useCallback, useMemo } from 'react';
 import { useErrorNotification } from './utils';
 
+const useFeed = (id: string) => {
+  const { data, refetch, loading, error } = useFeedQuery({
+    variables: { feedId: id },
+  });
+  useErrorNotification(error);
+  const feed = useMemo(() => data?.feed, [data]);
+  console.log(error);
+  return {
+    feed,
+    refetch,
+    loading,
+    error,
+  };
+};
+
 const useCreateFeed = () => {
   const [createFeedMutation, { error }] = useCreateFeedMutation();
   useErrorNotification(error);
@@ -61,4 +76,4 @@ const useRemoveUserFromFeed = () => {
   return removeUserFromFeed;
 };
 
-export { useCreateFeed, useAddUserToFeed, useRemoveUserFromFeed };
+export { useFeed, useCreateFeed, useAddUserToFeed, useRemoveUserFromFeed };
