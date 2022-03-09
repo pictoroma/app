@@ -7,10 +7,15 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import React, { useContext, useMemo } from 'react';
 import { ServerContext } from '../server';
+import { ProfileProvider } from '../profile';
+import { HomeProvider } from '../home';
 
 const GraphQLProvider: React.FC = ({ children }) => {
   const { token, domain } = useContext(ServerContext);
   const apolloClient = useMemo(() => {
+    if (!domain) {
+      return undefined;
+    }
     const link = createHttpLink({
       uri: `${domain}/graphql`,
     });
@@ -28,7 +33,19 @@ const GraphQLProvider: React.FC = ({ children }) => {
     });
   }, [token, domain]);
 
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
+  if (!apolloClient) {
+    return <>{children}</>;
+  }
+
+  return (
+    <ApolloProvider client={apolloClient}>
+      <ProfileProvider>
+        <HomeProvider>
+          {children}
+        </HomeProvider>
+      </ProfileProvider>
+    </ApolloProvider>
+  );
 };
 
 export { GraphQLProvider };

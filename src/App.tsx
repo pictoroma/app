@@ -7,7 +7,6 @@ import { GraphQLProvider } from './context/graphql';
 import { ServerProvider } from './context/server';
 import { light, dark } from '#/theme';
 import { Router } from '#/router';
-import { ProfileProvider } from './context/profile';
 import { NotificationProvider } from './context/notifications';
 
 export default function App() {
@@ -19,9 +18,7 @@ export default function App() {
           <ServerProvider>
             <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
             <GraphQLProvider>
-              <ProfileProvider>
-                <Router colorScheme={colorScheme} />
-              </ProfileProvider>
+              <Router colorScheme={colorScheme} />
             </GraphQLProvider>
           </ServerProvider>
         </NotificationProvider>

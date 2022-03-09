@@ -10,6 +10,7 @@ export const useErrorNotification = (error?: ApolloError) => {
       if (!error) {
         return;
       }
+      console.error(error);
       const id = show({
         type: 'error',
         text: error.message,
