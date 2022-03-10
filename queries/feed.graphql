@@ -12,6 +12,20 @@ query Feeds {
   }
 }
 
+query AllFeeds {
+  allFeeds {
+    id
+    name
+    users {
+      accessType
+      user {
+        name
+        username
+      }
+    }
+  }
+}
+
 query Feed($feedId: String!) {
   feed(id: $feedId) {
     id
@@ -41,4 +55,8 @@ mutation AddUserToFeed($accessType: String!, $userId: String!, $feedId: String!)
 
 mutation RemoveUserFromFeed($userId: String!, $feedId: String!) {
   removeUserFromFeed(userId: $userId, feedId: $feedId)
+}
+
+mutation RemoveFeed($feedId: String!) {
+  removeFeed(feedId: $feedId)
 }

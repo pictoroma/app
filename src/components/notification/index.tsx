@@ -3,6 +3,7 @@ import { Cell, Row } from '#/components/Row';
 import React from 'react';
 import styled from 'styled-components/native';
 import { Icon } from '../Icon';
+import { Body1 } from '#/typography';
 
 type Props = {
   notification: NotificationInfo;
@@ -19,13 +20,17 @@ const Notification: React.FC<Props> = ({ notification, dismiss }) => {
   return (
     <Wrapper>
       <Row
-        description={notification.text}
+        left={(
+          <Cell><Icon name="alert-circle" color="destructiveAlt" /></Cell>
+        )}
         right={
           <Cell onPress={dismiss}>
-            <Icon name="x" color="text" />
+            <Icon name="x" color="destructiveAlt" />
           </Cell>
         }
-      />
+      >
+        <Body1 color="destructiveAlt">{notification.text}</Body1>
+      </Row>
     </Wrapper>
   );
 }

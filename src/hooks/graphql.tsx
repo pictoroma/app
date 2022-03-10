@@ -29,6 +29,7 @@ export type CommentModel = {
   creator: UserModel;
   id: Scalars['String'];
   post: PostModel;
+  removed?: Maybe<Scalars['DateTime']>;
 };
 
 export type FeedModel = {
@@ -36,6 +37,7 @@ export type FeedModel = {
   id: Scalars['String'];
   name: Scalars['String'];
   posts: Array<PostModel>;
+  removed?: Maybe<Scalars['DateTime']>;
   users: Array<UserFeedRelationModel>;
 };
 
@@ -54,6 +56,7 @@ export type MediaModel = {
   id: Scalars['String'];
   lowres?: Maybe<Scalars['String']>;
   order?: Maybe<Scalars['Float']>;
+  removed?: Maybe<Scalars['DateTime']>;
   size: Scalars['Float'];
   type?: Maybe<Scalars['String']>;
 };
@@ -67,7 +70,9 @@ export type Mutation = {
   createPost: PostModel;
   inviteProfile: UserModel;
   registerPushNotification: PushRegistrationModel;
+  removeFeed: Scalars['Boolean'];
   removePost: Scalars['Boolean'];
+  removeUser: Scalars['Boolean'];
   removeUserFromFeed: Scalars['Boolean'];
   setProfileAvatar: UserModel;
 };
@@ -111,8 +116,18 @@ export type MutationRegisterPushNotificationArgs = {
 };
 
 
+export type MutationRemoveFeedArgs = {
+  feedId: Scalars['String'];
+};
+
+
 export type MutationRemovePostArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationRemoveUserArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -149,6 +164,7 @@ export type PostModel = {
   feed: FeedModel;
   id: Scalars['String'];
   media: Array<MediaModel>;
+  removed?: Maybe<Scalars['DateTime']>;
 };
 
 export type PushRegistrationModel = {
@@ -159,6 +175,7 @@ export type PushRegistrationModel = {
 
 export type Query = {
   __typename?: 'Query';
+  allFeeds: Array<FeedModel>;
   feed: FeedModel;
   feeds: Array<FeedModel>;
   post: PostModel;
@@ -196,6 +213,7 @@ export type UserModel = {
   feeds: Array<UserFeedRelationModel>;
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
+  removed?: Maybe<Scalars['DateTime']>;
   username: Scalars['String'];
 };
 
@@ -210,6 +228,11 @@ export type FeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FeedsQuery = { __typename?: 'Query', feeds: Array<{ __typename?: 'FeedModel', id: string, name: string, posts: Array<{ __typename?: 'PostModel', id: string, body?: string | null, media: Array<{ __typename?: 'MediaModel', id: string }> }> }> };
+
+export type AllFeedsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllFeedsQuery = { __typename?: 'Query', allFeeds: Array<{ __typename?: 'FeedModel', id: string, name: string, users: Array<{ __typename?: 'UserFeedRelationModel', accessType: string, user: { __typename?: 'UserModel', name?: string | null, username: string } }> }> };
 
 export type FeedQueryVariables = Exact<{
   feedId: Scalars['String'];
@@ -241,6 +264,13 @@ export type RemoveUserFromFeedMutationVariables = Exact<{
 
 
 export type RemoveUserFromFeedMutation = { __typename?: 'Mutation', removeUserFromFeed: boolean };
+
+export type RemoveFeedMutationVariables = Exact<{
+  feedId: Scalars['String'];
+}>;
+
+
+export type RemoveFeedMutation = { __typename?: 'Mutation', removeFeed: boolean };
 
 export type PostQueryVariables = Exact<{
   postId: Scalars['String'];
@@ -300,6 +330,13 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'UserModel', id: string, name?: string | null, username: string, avatar?: string | null }> };
+
+export type RemoveUserMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type RemoveUserMutation = { __typename?: 'Mutation', removeUser: boolean };
 
 
 export const CreateCommentDocument = gql`
@@ -377,6 +414,48 @@ export function useFeedsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Feed
 export type FeedsQueryHookResult = ReturnType<typeof useFeedsQuery>;
 export type FeedsLazyQueryHookResult = ReturnType<typeof useFeedsLazyQuery>;
 export type FeedsQueryResult = Apollo.QueryResult<FeedsQuery, FeedsQueryVariables>;
+export const AllFeedsDocument = gql`
+    query AllFeeds {
+  allFeeds {
+    id
+    name
+    users {
+      accessType
+      user {
+        name
+        username
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useAllFeedsQuery__
+ *
+ * To run a query within a React component, call `useAllFeedsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllFeedsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllFeedsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllFeedsQuery(baseOptions?: Apollo.QueryHookOptions<AllFeedsQuery, AllFeedsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllFeedsQuery, AllFeedsQueryVariables>(AllFeedsDocument, options);
+      }
+export function useAllFeedsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllFeedsQuery, AllFeedsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllFeedsQuery, AllFeedsQueryVariables>(AllFeedsDocument, options);
+        }
+export type AllFeedsQueryHookResult = ReturnType<typeof useAllFeedsQuery>;
+export type AllFeedsLazyQueryHookResult = ReturnType<typeof useAllFeedsLazyQuery>;
+export type AllFeedsQueryResult = Apollo.QueryResult<AllFeedsQuery, AllFeedsQueryVariables>;
 export const FeedDocument = gql`
     query Feed($feedId: String!) {
   feed(id: $feedId) {
@@ -521,6 +600,37 @@ export function useRemoveUserFromFeedMutation(baseOptions?: Apollo.MutationHookO
 export type RemoveUserFromFeedMutationHookResult = ReturnType<typeof useRemoveUserFromFeedMutation>;
 export type RemoveUserFromFeedMutationResult = Apollo.MutationResult<RemoveUserFromFeedMutation>;
 export type RemoveUserFromFeedMutationOptions = Apollo.BaseMutationOptions<RemoveUserFromFeedMutation, RemoveUserFromFeedMutationVariables>;
+export const RemoveFeedDocument = gql`
+    mutation RemoveFeed($feedId: String!) {
+  removeFeed(feedId: $feedId)
+}
+    `;
+export type RemoveFeedMutationFn = Apollo.MutationFunction<RemoveFeedMutation, RemoveFeedMutationVariables>;
+
+/**
+ * __useRemoveFeedMutation__
+ *
+ * To run a mutation, you first call `useRemoveFeedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFeedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFeedMutation, { data, loading, error }] = useRemoveFeedMutation({
+ *   variables: {
+ *      feedId: // value for 'feedId'
+ *   },
+ * });
+ */
+export function useRemoveFeedMutation(baseOptions?: Apollo.MutationHookOptions<RemoveFeedMutation, RemoveFeedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveFeedMutation, RemoveFeedMutationVariables>(RemoveFeedDocument, options);
+      }
+export type RemoveFeedMutationHookResult = ReturnType<typeof useRemoveFeedMutation>;
+export type RemoveFeedMutationResult = Apollo.MutationResult<RemoveFeedMutation>;
+export type RemoveFeedMutationOptions = Apollo.BaseMutationOptions<RemoveFeedMutation, RemoveFeedMutationVariables>;
 export const PostDocument = gql`
     query Post($postId: String!) {
   post(id: $postId) {
@@ -876,3 +986,34 @@ export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<User
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
+export const RemoveUserDocument = gql`
+    mutation RemoveUser($userId: String!) {
+  removeUser(userId: $userId)
+}
+    `;
+export type RemoveUserMutationFn = Apollo.MutationFunction<RemoveUserMutation, RemoveUserMutationVariables>;
+
+/**
+ * __useRemoveUserMutation__
+ *
+ * To run a mutation, you first call `useRemoveUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeUserMutation, { data, loading, error }] = useRemoveUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useRemoveUserMutation(baseOptions?: Apollo.MutationHookOptions<RemoveUserMutation, RemoveUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveUserMutation, RemoveUserMutationVariables>(RemoveUserDocument, options);
+      }
+export type RemoveUserMutationHookResult = ReturnType<typeof useRemoveUserMutation>;
+export type RemoveUserMutationResult = Apollo.MutationResult<RemoveUserMutation>;
+export type RemoveUserMutationOptions = Apollo.BaseMutationOptions<RemoveUserMutation, RemoveUserMutationVariables>;

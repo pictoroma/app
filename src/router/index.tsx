@@ -20,6 +20,8 @@ import { LoginScreen } from '#/screens/login/login';
 import { useProfile } from '#/hooks/profile';
 import { AcceptInvitationScreen } from '#/screens/login/accept-invitation';
 import { CommentsScreen } from '#/screens/comments';
+import { AdminUsersScreen } from '#/screens/admin/users';
+import { AdminFeedsScreen } from '#/screens/admin/feeds';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const TabStack = createBottomTabNavigator<TabParamList>();
@@ -29,6 +31,9 @@ const Profile = () => {
   return (
     <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
       <ProfileStack.Screen name="ProfileMain" component={ProfileScreen} />
+      <ProfileStack.Screen name="AdminUsers" component={AdminUsersScreen} />
+      <ProfileStack.Screen name="AdminFeeds" component={AdminFeedsScreen} />
+      <ProfileStack.Screen name="FeedEdit" component={FeedEditScreen} />
     </ProfileStack.Navigator>
   );
 };
@@ -122,7 +127,6 @@ const Root = () => {
               presentation: 'modal',
             }}
           >
-            <RootStack.Screen name="FeedEdit" component={FeedEditScreen} />
             <RootStack.Screen name="Comments" component={CommentsScreen} />
           </RootStack.Group>
         </>

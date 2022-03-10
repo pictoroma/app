@@ -6,3 +6,7 @@ query Users {
     avatar
   }
 }
+
+mutation RemoveUser($userId: String!) {
+  removeUser(userId: $userId)
+}

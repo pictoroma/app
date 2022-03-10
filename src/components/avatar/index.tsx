@@ -16,6 +16,7 @@ const Wrapper = styled.View`
   overflow: hidden;
   align-items: center;
   justify-content: center;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const Avatar: React.FC<Props> = ({ mediaId, onPress }) => {

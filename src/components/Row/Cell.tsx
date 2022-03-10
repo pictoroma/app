@@ -9,14 +9,14 @@ interface Props {
   accessibilityHint?: string;
   children?: ReactNode;
   onPress?: () => any;
-  background?: string;
+  background?: keyof Theme['colors'];
   flex?: string | number;
   direction?: 'row' | 'column';
   align?: 'flex-start' | 'flex-end' | 'center' | 'stretch';
 }
 
 const Wrapper = styled.View<{
-  background?: string;
+  background?: keyof Theme['colors'];
   flex?: string | number;
   direction?: 'row' | 'column';
   theme: Theme;
@@ -24,7 +24,7 @@ const Wrapper = styled.View<{
 }>`
   padding: ${({ theme }) => theme.margins.medium / 2}px
     ${({ theme }) => theme.margins.medium / 2}px;
-  ${({ background }) => (background ? `background: ${background};` : '')}
+  ${({ background, theme }) => (background ? `background: ${theme.colors[background]};` : '')}
   ${({ flex }) => (flex ? `flex: ${flex};` : '')}
   flex-direction: ${({ direction }) => (direction ? direction : 'row')};
   align-items: ${({ align }) => (align ? align : 'center')};

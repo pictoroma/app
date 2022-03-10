@@ -15,6 +15,7 @@ function Header({ title, add, onPress, left }: Props) {
       onPress={onPress}
       left={left}
       title={title}
+      background="header"
       right={
         add && (
           <Cell onPress={add}>

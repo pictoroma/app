@@ -3,6 +3,8 @@ import {
   useCreateFeedMutation,
   useRemoveUserFromFeedMutation,
   useFeedQuery,
+  useAllFeedsQuery,
+  useRemoveFeedMutation,
 } from '#/hooks/graphql';
 import { useCallback, useMemo } from 'react';
 import { useErrorNotification } from './utils';
@@ -13,9 +15,20 @@ const useFeed = (id: string) => {
   });
   useErrorNotification(error);
   const feed = useMemo(() => data?.feed, [data]);
-  console.log(error);
   return {
     feed,
+    refetch,
+    loading,
+    error,
+  };
+};
+
+const useAllFeeds = () => {
+  const { data, refetch, loading, error } = useAllFeedsQuery();
+  useErrorNotification(error);
+  const feeds = useMemo(() => data?.allFeeds || [], [data]);
+  return {
+    feeds,
     refetch,
     loading,
     error,
@@ -76,4 +89,19 @@ const useRemoveUserFromFeed = () => {
   return removeUserFromFeed;
 };
 
-export { useFeed, useCreateFeed, useAddUserToFeed, useRemoveUserFromFeed };
+export const useRemoveFeed = () => {
+  const [removeFeedMutation, { error }] = useRemoveFeedMutation();
+  useErrorNotification(error);
+  const removeFeed = useCallback(
+    async (id: string) => {
+      await removeFeedMutation({
+        variables: { feedId: id },
+      });
+    },
+    [removeFeedMutation],
+  );
+
+  return removeFeed;
+};
+
+export { useAllFeeds, useFeed, useCreateFeed, useAddUserToFeed, useRemoveUserFromFeed };

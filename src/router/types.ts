@@ -4,7 +4,11 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type ProfileParamList = {
   ProfileMain: {};
-  Feeds: {};
+  AdminUsers: {};
+  AdminFeeds: {};
+  FeedEdit: {
+    id: string;
+  };
 };
 
 export type TabParamList = {
@@ -15,9 +19,6 @@ export type TabParamList = {
 
 export type RootStackParamList = {
   Main: {};
-  FeedEdit: {
-    id: string;
-  };
   Comments: {
     id: string;
   };
@@ -34,10 +35,6 @@ export type TabStackProps = CompositeScreenProps<
   MainStackProps
 >;
 
-export type FeedEditScreenNavigationProp = NativeStackScreenProps<
-  RootStackParamList,
-  'FeedEdit'
->;
 export type LoginScreenNavigationProp = NativeStackScreenProps<
   RootStackParamList,
   'Login'
@@ -63,6 +60,11 @@ export type AddScreenNavigationProp = CompositeScreenProps<
 >;
 
 export type ProfileScreenNavigationProp = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList, 'Profile'>,
+  MainStackProps
+>;
+
+export type FeedEditScreenNavigationProp = CompositeScreenProps<
   BottomTabScreenProps<TabParamList, 'Profile'>,
   MainStackProps
 >;

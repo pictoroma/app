@@ -11,6 +11,11 @@ type ServerContextValue = {
   token?: string;
   logout: () => Promise<void>;
   login: (domain: string, username: string, secret: string) => Promise<void>;
+  config?: {
+    notifications: {
+      push: boolean;
+    };
+  };
   acceptInvitation: (
     invitation: string,
     username: string,
@@ -24,6 +29,7 @@ const ServerContext = createContext<ServerContextValue>(undefined as any);
 const ServerProvider: React.FC = ({ children }) => {
   const [context, setContext] = useState<{ domain: string; token: string }>();
   const { show, dismiss } = useNotifications();
+  const [config, setConfig] = useState<ServerContextValue['config']>();
   const [pushToken, setPushToken] = useState<string>();
   const [ready, setReady] = useState(false);
   const logout = useCallback(async () => {
@@ -32,11 +38,11 @@ const ServerProvider: React.FC = ({ children }) => {
   }, [setContext]);
 
   useEffect(() => {
-    if (!context) {
+    if (!context || !config?.notifications.push) {
       return;
     }
     registerForPushNotificationsAsync().then(setPushToken);
-  }, [context]);
+  }, [context, config]);
 
   const login = useCallback(
     async (domain: string, username: string, secret: string) => {
@@ -126,6 +132,7 @@ const ServerProvider: React.FC = ({ children }) => {
             },
           });
           if (configResponse.ok) {
+            setConfig(await configResponse.json());
             setContext(JSON.parse(item));
           } else {
             show({
@@ -153,7 +160,7 @@ const ServerProvider: React.FC = ({ children }) => {
 
   return (
     <ServerContext.Provider
-      value={{ ...context, pushToken, logout, login, acceptInvitation }}
+      value={{ ...context, config, pushToken, logout, login, acceptInvitation }}
     >
       {children}
     </ServerContext.Provider>

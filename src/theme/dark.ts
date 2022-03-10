@@ -7,6 +7,7 @@ const darkTheme: Theme = {
     ...light.colors,
     primary: '#e67e22',
     input: '#333',
+    header: '#222',
     icon: '#e67e22',
     background: '#151515',
     shadow: '#000',

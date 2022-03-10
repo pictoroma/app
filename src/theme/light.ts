@@ -5,6 +5,8 @@ const lightTheme: Theme = {
     primary: '#1abc9c',
     icon: '#1abc9c',
     destructive: '#e74c3c',
+    destructiveAlt: '#fff',
+    header: '#f9f9f9',
     shade: '#ededed',
     input: '#ddd',
     secondary: 'blue',

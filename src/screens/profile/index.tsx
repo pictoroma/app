@@ -6,6 +6,7 @@ import {
   Cell,
   Group,
   Header,
+  Icon,
   Input,
   Page,
   Popup,
@@ -16,6 +17,11 @@ import { ProfileMainScreenNavigationProp } from '#/router/types';
 import { useCreateFeed } from '#/hooks/feeds';
 import { ServerContext } from '#/context/server';
 import { useSendInvite } from '#/hooks/users';
+import styled from 'styled-components/native';
+
+const Wrapper = styled.ScrollView`
+  flex: 1;
+`
 
 const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
   navigation,
@@ -69,70 +75,96 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
 
   return (
     <Page>
-      <Header title="Profile" />
-      <Row
-        left={
-          <Cell>
-            <Avatar
-              mediaId={profile?.avatar || undefined}
-              onPress={pickImage}
-            />
-          </Cell>
-        }
-        title={profile?.name || profile?.username}
-      />
-      <Popup visible={addFeedVisible} onClose={() => setAddFeedVisible(false)}>
-        <Row>
-          <Input label="Name" value={feedName} onChangeText={setFeedName} />
-        </Row>
-        <Row>
-          <Button title="Save" onPress={saveAddFeed} />
-        </Row>
-      </Popup>
-      <Group
-        title="My feeds"
-        items={feeds}
-        getKey={item => item.feed.id}
-        add={
-          profile?.admin
-            ? () => {
-                setAddFeedVisible(true);
-              }
-            : undefined
-        }
-        render={item => (
-          <Row
-            title={item.feed.name}
-            overline={item.accessType}
-            right={
-              <Cell>
-                <Button title="Leave" type="destructive" />
-              </Cell>
-            }
-            onPress={() => {
-              navigation.navigate('FeedEdit', { id: item.feed.id });
-            }}
-          />
-        )}
-      />
-      {profile?.admin && (
-        <>
+      <Wrapper>
+        <Header title="Profile" />
+        <Row
+          left={
+            <Cell>
+              <Avatar
+                mediaId={profile?.avatar || undefined}
+                onPress={pickImage}
+              />
+            </Cell>
+          }
+          title={profile?.name || profile?.username}
+        />
+        <Popup visible={addFeedVisible} onClose={() => setAddFeedVisible(false)}>
           <Row>
-            <Button title="Invite" onPress={() => setInviteVisible(true)} />
+            <Input label="Name" value={feedName} onChangeText={setFeedName} />
           </Row>
-          <Popup visible={inviteVisible} onClose={() => setAddFeedVisible(false)}>
-            <Row>
-              <Input label="Email" value={inviteEmail} onChangeText={setInviteEmail} />
-            </Row>
-            <Row>
-              <Button title="Save" onPress={sendInviteAction} />
-            </Row>
-          </Popup>
-        </>
-      )}
-      <Row>
-        <Button title="Logout" type="destructive" onPress={logout} />
-      </Row>
+          <Row>
+            <Button title="Save" onPress={saveAddFeed} />
+          </Row>
+        </Popup>
+        <Group
+          title="My feeds"
+          items={feeds}
+          getKey={item => item.feed.id}
+          add={
+            profile?.admin
+              ? () => {
+                  setAddFeedVisible(true);
+                }
+              : undefined
+          }
+          render={item => (
+            <Row
+              title={item.feed.name}
+              overline={item.accessType}
+              right={
+                <Cell>
+                  <Button title="Leave" type="destructive" />
+                </Cell>
+              }
+              onPress={() => {
+                navigation.navigate('FeedEdit', { id: item.feed.id });
+              }}
+            />
+          )}
+        />
+        {profile?.admin && (
+          <Group title="Admin">
+            <Row
+              title="Invite"
+              onPress={() => setInviteVisible(true)}
+              left={(
+                <Cell><Icon name="user-plus" color="text" /></Cell>
+              )}
+            />
+            <Row
+              title="Users"
+              onPress={() => navigation.navigate('AdminUsers', {})}
+              left={(
+                <Cell><Icon name="users" color="text" /></Cell>
+              )}
+              right={(
+                <Cell><Icon name="chevron-right" color="text" /></Cell>
+              )}
+            />
+            <Row
+              title="Feeds"
+              onPress={() => navigation.navigate('AdminFeeds', {})}
+              left={(
+                <Cell><Icon name="layers" color="text" /></Cell>
+              )}
+              right={(
+                <Cell><Icon name="chevron-right" color="text" /></Cell>
+              )}
+            />
+            <Popup visible={inviteVisible} onClose={() => setInviteVisible(false)}>
+              <Row>
+                <Input label="Email" value={inviteEmail} onChangeText={setInviteEmail} />
+              </Row>
+              <Row>
+                <Button title="Send" onPress={sendInviteAction} />
+              </Row>
+            </Popup>
+          </Group>
+        )}
+        <Row>
+          <Button title="Logout" type="destructive" onPress={logout} />
+        </Row>
+      </Wrapper>
     </Page>
   );
 };

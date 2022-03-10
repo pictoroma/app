@@ -63,7 +63,7 @@ const FeedEditScreen: React.FC<FeedEditScreenNavigationProp> = ({ route }) => {
 
   return (
     <Page>
-      <Header title="Feed" />
+      <Header back title="Feed" />
       <Row>
         <Input label="Name" value={feed.name} />
       </Row>

@@ -2,6 +2,8 @@ interface Theme {
   colors: {
     primary: string;
     destructive: string;
+    destructiveAlt: string;
+    header: string;
     icon: string;
     input: string;
     secondary: string;

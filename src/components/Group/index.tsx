@@ -26,6 +26,7 @@ const Wrapper = styled.View`
   shadow-opacity: 0.1;
   shadow-color: ${({ theme }) => theme.colors.shadow};
   shadow-radius: 5px;
+  overflow: hidden;
 `;
 
 function Group<T = any>(props: ListProps<T> | ChildProps) {
@@ -37,7 +38,7 @@ function Group<T = any>(props: ListProps<T> | ChildProps) {
       <Wrapper>
         <Header
           left={
-            <Icon name={visible ? 'chevron-down' : 'chevron-up'} size={18} />
+            <Cell><Icon name={visible ? 'chevron-down' : 'chevron-up'} size={18} /></Cell>
           }
           title={title}
           add={add}
