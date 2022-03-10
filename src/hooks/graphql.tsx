@@ -282,6 +282,13 @@ export type SetProfileAvatarMutationVariables = Exact<{
 
 export type SetProfileAvatarMutation = { __typename?: 'Mutation', setProfileAvatar: { __typename?: 'UserModel', id: string } };
 
+export type InviteProfileMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type InviteProfileMutation = { __typename?: 'Mutation', inviteProfile: { __typename?: 'UserModel', id: string } };
+
 export type RegisterPushNotificationMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
@@ -766,6 +773,39 @@ export function useSetProfileAvatarMutation(baseOptions?: Apollo.MutationHookOpt
 export type SetProfileAvatarMutationHookResult = ReturnType<typeof useSetProfileAvatarMutation>;
 export type SetProfileAvatarMutationResult = Apollo.MutationResult<SetProfileAvatarMutation>;
 export type SetProfileAvatarMutationOptions = Apollo.BaseMutationOptions<SetProfileAvatarMutation, SetProfileAvatarMutationVariables>;
+export const InviteProfileDocument = gql`
+    mutation InviteProfile($email: String!) {
+  inviteProfile(email: $email) {
+    id
+  }
+}
+    `;
+export type InviteProfileMutationFn = Apollo.MutationFunction<InviteProfileMutation, InviteProfileMutationVariables>;
+
+/**
+ * __useInviteProfileMutation__
+ *
+ * To run a mutation, you first call `useInviteProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteProfileMutation, { data, loading, error }] = useInviteProfileMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useInviteProfileMutation(baseOptions?: Apollo.MutationHookOptions<InviteProfileMutation, InviteProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InviteProfileMutation, InviteProfileMutationVariables>(InviteProfileDocument, options);
+      }
+export type InviteProfileMutationHookResult = ReturnType<typeof useInviteProfileMutation>;
+export type InviteProfileMutationResult = Apollo.MutationResult<InviteProfileMutation>;
+export type InviteProfileMutationOptions = Apollo.BaseMutationOptions<InviteProfileMutation, InviteProfileMutationVariables>;
 export const RegisterPushNotificationDocument = gql`
     mutation RegisterPushNotification($token: String!) {
   registerPushNotification(token: $token) {

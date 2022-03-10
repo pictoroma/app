@@ -20,3 +20,9 @@ mutation SetProfileAvatar($mediaId: String) {
     id
   }
 }
+
+mutation InviteProfile($email: String!) {
+  inviteProfile(email: $email) {
+    id
+  }
+}

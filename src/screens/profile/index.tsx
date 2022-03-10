@@ -15,6 +15,7 @@ import { useProfile, useSetAvatar } from '#/hooks/profile';
 import { ProfileMainScreenNavigationProp } from '#/router/types';
 import { useCreateFeed } from '#/hooks/feeds';
 import { ServerContext } from '#/context/server';
+import { useSendInvite } from '#/hooks/users';
 
 const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
   navigation,
@@ -23,8 +24,11 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
   const { logout } = useContext(ServerContext);
   const createFeed = useCreateFeed();
   const [addFeedVisible, setAddFeedVisible] = useState(false);
+  const [inviteVisible, setInviteVisible] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
   const [feedName, setFeedName] = useState('');
   const setAvatar = useSetAvatar();
+  const sendInvite = useSendInvite();
   const pickImage = useCallback(async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -48,12 +52,21 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
     await setAvatar(file);
     await refetch();
   }, []);
+
   const saveAddFeed = useCallback(async () => {
     await createFeed(feedName);
     setFeedName('');
     setAddFeedVisible(false);
     await refetch();
   }, [feedName, createFeed]);
+
+  const sendInviteAction = useCallback(async () => {
+    await sendInvite(inviteEmail);
+    setInviteEmail('');
+    setInviteVisible(false);
+    await refetch();
+  }, [inviteEmail, sendInvite]);
+
   return (
     <Page>
       <Header title="Profile" />
@@ -102,6 +115,21 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
           />
         )}
       />
+      {profile?.admin && (
+        <>
+          <Row>
+            <Button title="Invite" onPress={() => setInviteVisible(true)} />
+          </Row>
+          <Popup visible={inviteVisible} onClose={() => setAddFeedVisible(false)}>
+            <Row>
+              <Input label="Email" value={inviteEmail} onChangeText={setInviteEmail} />
+            </Row>
+            <Row>
+              <Button title="Save" onPress={sendInviteAction} />
+            </Row>
+          </Popup>
+        </>
+      )}
       <Row>
         <Button title="Logout" type="destructive" onPress={logout} />
       </Row>

@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useUsersQuery } from './graphql';
+import { useCallback, useMemo } from 'react';
+import { useInviteProfileMutation, useUsersQuery } from './graphql';
 import { useErrorNotification } from './utils';
 
 export const useUsers = () => {
@@ -12,4 +12,19 @@ export const useUsers = () => {
     loading,
     error,
   };
+};
+
+export const useSendInvite = () => {
+  const [sendInviteMutation, { error }] = useInviteProfileMutation();
+  useErrorNotification(error);
+  const sendInvite = useCallback(
+    async (email: string) => {
+      await sendInviteMutation({
+        variables: { email },
+      });
+    },
+    [sendInviteMutation],
+  );
+
+  return sendInvite;
 };
