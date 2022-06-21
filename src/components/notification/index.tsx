@@ -8,13 +8,13 @@ import { Body1 } from '#/typography';
 type Props = {
   notification: NotificationInfo;
   dismiss: () => void;
-}
+};
 
 const Wrapper = styled.View`
   background: ${({ theme }) => theme.colors.destructive};
   margin: 5px;
   border-radius: 5px;
-`
+`;
 
 const Notification: React.FC<Props> = ({ notification, dismiss }) => {
   return (
@@ -33,8 +33,6 @@ const Notification: React.FC<Props> = ({ notification, dismiss }) => {
       </Row>
     </Wrapper>
   );
-}
+};
 
 export { Notification };
-
-

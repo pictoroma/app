@@ -12,7 +12,7 @@ export const useSaveImage = () => {
         const download = FileSystem.createDownloadResumable(
           url,
           FileSystem.cacheDirectory + 'download.jpeg',
-          { headers: { Authorization: `bearer: ${token}`}},
+          { headers: { Authorization: `bearer: ${token}` } }
         );
         const result = await download.downloadAsync();
         if (!result) {
@@ -21,7 +21,7 @@ export const useSaveImage = () => {
         MediaLibrary.saveToLibraryAsync(result.uri);
         Alert.alert('Image saved');
       } catch (err) {
-        Alert.alert(`Failed: ${err.toString()}`)
+        Alert.alert(`Failed: ${err.toString()}`);
       }
     },
     [token]

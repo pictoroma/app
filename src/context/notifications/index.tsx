@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
 type NotificationInfo = {
-  type: 'info' | 'error',
+  type: 'info' | 'error';
   text: string;
   autoHideAfter?: number;
   actions?: {
@@ -12,18 +12,20 @@ type NotificationInfo = {
     onPress: () => void;
     dismissOnPress: boolean;
   };
-}
+};
 
 type InternalNotification = NotificationInfo & {
   id: number;
-}
+};
 
 type NotificationContextValue = {
   show: (notification: NotificationInfo) => number;
   dismiss: (id: number) => void;
-}
+};
 
-const NotificationContext = createContext<NotificationContextValue>(undefined as any);
+const NotificationContext = createContext<NotificationContextValue>(
+  undefined as any
+);
 
 const Wrapper = styled.View<{ top: number }>`
   position: absolute;
@@ -35,13 +37,15 @@ const Wrapper = styled.View<{ top: number }>`
 let nextId = 0;
 
 const NotificationProvider: React.FC = ({ children }) => {
-  const [notifications, setNotifications] = useState<InternalNotification[]>([]);
+  const [notifications, setNotifications] = useState<InternalNotification[]>(
+    []
+  );
   const insets = useSafeAreaInsets();
 
   const show = useCallback(
     (notification: NotificationInfo) => {
       const id = nextId++;
-      setNotifications(current => [...current, {...notification, id}]);
+      setNotifications(current => [...current, { ...notification, id }]);
       return id;
     },
     [setNotifications]
@@ -51,7 +55,7 @@ const NotificationProvider: React.FC = ({ children }) => {
     (id: number) => {
       setNotifications(current => current.filter(c => c.id !== id));
     },
-    [setNotifications],
+    [setNotifications]
   );
 
   const context = useMemo(
@@ -59,7 +63,7 @@ const NotificationProvider: React.FC = ({ children }) => {
       show,
       dismiss,
     }),
-    [show, dismiss],
+    [show, dismiss]
   );
 
   return (
@@ -67,14 +71,18 @@ const NotificationProvider: React.FC = ({ children }) => {
       {notifications.length > 0 && (
         <Wrapper top={insets.top}>
           {notifications.map((notification, index) => (
-            <Notification dismiss={() => dismiss(notification.id)} key={index} notification={notification} />
+            <Notification
+              dismiss={() => dismiss(notification.id)}
+              key={index}
+              notification={notification}
+            />
           ))}
         </Wrapper>
       )}
       {children}
     </NotificationContext.Provider>
-  )
-}
+  );
+};
 
 export type { NotificationInfo };
 export { NotificationProvider, NotificationContext };

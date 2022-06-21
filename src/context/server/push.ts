@@ -24,5 +24,5 @@ export const registerForPushNotificationsAsync = async () => {
       });
     }
     return token;
-  };
+  }
 };

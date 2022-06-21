@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import styled from 'styled-components/native';
 import { UploadFile } from '#/hooks/posts';

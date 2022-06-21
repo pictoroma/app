@@ -3,7 +3,7 @@ import { Dialog } from '#/components/Dialog';
 import { DeepPartial } from '#/helpers/types';
 import { FeedModel } from '#/hooks/graphql';
 import { Body1 } from '#/typography';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 type FeedInputProps = {
   label: string;
