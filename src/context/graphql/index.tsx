@@ -28,7 +28,26 @@ const GraphQLProvider: React.FC = ({ children }) => {
       };
     });
     return new ApolloClient({
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        typePolicies: {
+          Query: {
+            fields: {
+              posts: {
+                keyArgs: false,
+                merge(existing: any = [], incoming: any) {
+                  const clone = existing.slice();
+                  for (let next of incoming) {
+                    if (!clone.find((p: any) => p.__ref === next.__ref)) {
+                      clone.push(next);
+                    }
+                  }
+                  return clone;
+                },
+              },
+            },
+          },
+        },
+      }),
       link: authLink.concat(link),
     });
   }, [token, domain]);
@@ -40,9 +59,7 @@ const GraphQLProvider: React.FC = ({ children }) => {
   return (
     <ApolloProvider client={apolloClient}>
       <ProfileProvider>
-        <HomeProvider>
-          {children}
-        </HomeProvider>
+        <HomeProvider>{children}</HomeProvider>
       </ProfileProvider>
     </ApolloProvider>
   );

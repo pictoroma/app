@@ -3,7 +3,7 @@ import { Dialog } from '#/components/Dialog';
 import { PartialDeep } from 'type-fest';
 import { UserModel } from '#/hooks/graphql';
 import { Body1 } from '#/typography';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 type UserInputProps = {
   label: string;

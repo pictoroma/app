@@ -13,14 +13,11 @@ const Wrapper = styled(BlurView)`
   justify-content: center;
 `;
 
-const Activity = styled.ActivityIndicator`
-  
-`
-
+const Activity = styled.ActivityIndicator``;
 
 const OverlayLoader: React.FC<{}> = () => (
   <Wrapper intensity={20}>
-    <Activity /> 
+    <Activity />
   </Wrapper>
 );
 

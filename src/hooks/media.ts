@@ -24,7 +24,7 @@ export const useCreateMedia = () => {
         }
         const json = await response.json();
         ids.push(json.ids[0]);
-      };
+      }
       return ids;
     },
     [token, domain]

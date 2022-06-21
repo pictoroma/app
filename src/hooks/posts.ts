@@ -72,8 +72,8 @@ export const useRemovePost = () => {
         setLoading(false);
       }
     },
-    [removePostMutation],
-  )
+    [removePostMutation]
+  );
 
   return { removePost, loading };
 };

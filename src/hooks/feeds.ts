@@ -53,7 +53,7 @@ const useCreateFeed = () => {
 };
 
 const useAddUserToFeed = () => {
-  const [addUserToFeedMutation, {error}] = useAddUserToFeedMutation();
+  const [addUserToFeedMutation, { error }] = useAddUserToFeedMutation();
   useErrorNotification(error);
   const addUserToFeed = useCallback(
     async (feedId: string, userId: string, accessType: string) => {
@@ -72,7 +72,8 @@ const useAddUserToFeed = () => {
 };
 
 const useRemoveUserFromFeed = () => {
-  const [removeUserFromFeedMutation, { error }] = useRemoveUserFromFeedMutation();
+  const [removeUserFromFeedMutation, { error }] =
+    useRemoveUserFromFeedMutation();
   useErrorNotification(error);
   const removeUserFromFeed = useCallback(
     async (feedId: string, userId: string) => {

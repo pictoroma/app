@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import {
   Avatar,

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components/native';
 import { ListRenderItem, RefreshControl, Dimensions } from 'react-native';
 import MasonryList from '@react-native-seoul/masonry-list';
@@ -20,18 +20,50 @@ const Wrapper = styled.View`
   flex: 1;
 `;
 
+const onlyOnce = (fn: () => Promise<any>) => {
+  let running = false;
+  console.log('setup');
+  return () => {
+    if (running) {
+      return;
+    }
+    console.log('run', running);
+    running = true;
+    fn()
+      .then(() => {
+        running = false;
+      })
+      .catch(() => {
+        running = false;
+      });
+  };
+};
+
 const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
-  const { posts, loading, refetch, feeds: selectedFeeds, setFeeds: setSelectedFeeds } = useFeed();
+  const [
+    onEndReachedCalledDuringMomentum,
+    setOnEndReachedCalledDuringMomentum,
+  ] = useState(false);
+  const {
+    posts,
+    loading,
+    refetch,
+    fetchMore,
+    feeds: selectedFeeds,
+    setFeeds: setSelectedFeeds,
+  } = useFeed();
   const { feeds } = useProfile();
 
   const userFeeds = useMemo(() => feeds.map(f => f.feed), [feeds]);
   const columns = useMemo(
     () => Math.ceil(Dimensions.get('window').width / 500),
-    [],
+    []
   );
 
   const renderItem: ListRenderItem<typeof posts[0]> = useCallback(
-    ({ item }) => <PostRow fullWidth={columns <= 1} key={item.id} post={item} />,
+    ({ item }) => (
+      <PostRow fullWidth={columns <= 1} key={item.id} post={item} />
+    ),
     [columns]
   );
 
@@ -57,8 +89,24 @@ const FeedScreen: React.FC<AddScreenNavigationProp> = () => {
           data={posts}
           keyExtractor={(item: any) => item.id}
           renderItem={renderItem}
+          onEndReachedThreshold={0.3}
+          onEndReached={() => {
+            if (!onEndReachedCalledDuringMomentum) {
+              fetchMore({
+                variables: {
+                  filter: {
+                    offset: posts.length,
+                  },
+                },
+              });
+              setOnEndReachedCalledDuringMomentum(true);
+            }
+          }}
           numColumns={columns}
           ItemSeparatorComponent={Seperator}
+          onMomentumScrollBegin={() => {
+            setOnEndReachedCalledDuringMomentum(false);
+          }}
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={refetch} />
           }

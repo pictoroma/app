@@ -46,7 +46,7 @@ export type AcceptInvitationScreenNavigationProp = NativeStackScreenProps<
 
 export type CommentsScreenNavigationProp = NativeStackScreenProps<
   RootStackParamList,
-  'Comments' 
+  'Comments'
 >;
 
 export type FeedScreenNavigationProp = CompositeScreenProps<

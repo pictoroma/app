@@ -1,3 +1,4 @@
+import React from 'react';
 import { usePostsQuery } from '#/hooks/graphql';
 import { useErrorNotification } from '#/hooks/utils';
 import { createContext, useMemo, useState } from 'react';
@@ -8,7 +9,7 @@ type HomeContextValue = BaseType & {
   posts: Exclude<BaseType['data'], undefined>['posts'];
   feeds: string[];
   setFeeds: React.Dispatch<React.SetStateAction<string[]>>;
-}
+};
 
 const HomeContext = createContext<HomeContextValue>(undefined as any);
 
@@ -18,6 +19,8 @@ const HomeProvider: React.FC = ({ children }) => {
     variables: {
       filter: {
         feeds: feeds.length > 0 ? feeds : undefined,
+        limit: 3,
+        offset: 0,
       },
     },
   });
@@ -33,14 +36,12 @@ const HomeProvider: React.FC = ({ children }) => {
       posts,
       setFeeds,
     }),
-    [props, data, feeds, setFeeds],
-  )
+    [props, data, feeds, setFeeds]
+  );
 
   return (
-    <HomeContext.Provider value={context}>
-      {children}
-    </HomeContext.Provider>
+    <HomeContext.Provider value={context}>{children}</HomeContext.Provider>
   );
-}
+};
 
 export { HomeContext, HomeProvider };

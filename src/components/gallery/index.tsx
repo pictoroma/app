@@ -4,7 +4,7 @@ import { DeepPartial } from '#/helpers/types';
 import { MediaModel } from '#/hooks/graphql';
 import { Image } from '../Image';
 import { Cell, Row } from '../Row';
-import { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { ServerContext } from '#/context/server';
 import { Icon } from '../Icon';
 import { dark } from '#/theme';
@@ -51,7 +51,8 @@ const Dot = styled.View<{
 }>`
   width: 6px;
   height: 6px;
-  background: ${({ selected, theme }) => (selected ? theme.colors.primary : '#ccc')};
+  background: ${({ selected, theme }) =>
+    selected ? theme.colors.primary : '#ccc'};
   margin: 0 5px;
   border-radius: 3px;
 `;

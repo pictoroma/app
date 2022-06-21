@@ -126,11 +126,14 @@ const ServerProvider: React.FC = ({ children }) => {
       if (item) {
         const nextContext = JSON.parse(item) as ServerContextValue;
         try {
-          const configResponse = await fetch(`${nextContext.domain}/api/config`, {
-            headers: {
-              Authorization: `Bearer ${nextContext.token}`,
-            },
-          });
+          const configResponse = await fetch(
+            `${nextContext.domain}/api/config`,
+            {
+              headers: {
+                Authorization: `Bearer ${nextContext.token}`,
+              },
+            }
+          );
           if (configResponse.ok) {
             setConfig(await configResponse.json());
             setContext(JSON.parse(item));
@@ -138,13 +141,13 @@ const ServerProvider: React.FC = ({ children }) => {
             show({
               type: 'error',
               text: await configResponse.text(),
-            });     
+            });
           }
-        } catch(err) {
+        } catch (err) {
           show({
             type: 'error',
             text: err.message,
-          });     
+          });
         }
       }
       setReady(true);
