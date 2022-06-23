@@ -30,8 +30,15 @@ const ScrollPage = styled.View<{
 `;
 
 const Wrapper = styled.View`
-  border-radius: 5px;
+  border-radius: 20px;
   overflow: hidden;
+`;
+
+const Shadow = styled.View`
+  shadow-color: ${({ theme }) => theme.colors.shadow};
+  shadow-offset: 0px 0px;
+  shadow-opacity: 0.4;
+  shadow-radius: 5px;
 `;
 
 type PagerProps = {
@@ -130,54 +137,58 @@ const Gallery: React.FC<GalleryProps> = ({ media }) => {
   );
   if (media.length === 1) {
     return (
-      <Row>
+      <>
         <Lightbox />
-        <Touchable onPress={() => setLightboxVisible(true)}>
-          <Wrapper>
-            <Image media={media[0]!} />
-          </Wrapper>
-        </Touchable>
-      </Row>
+        <Shadow>
+          <Touchable onPress={() => setLightboxVisible(true)}>
+            <Wrapper>
+              <Image media={media[0]!} />
+            </Wrapper>
+          </Touchable>
+        </Shadow>
+      </>
     );
   }
 
   return (
-    <Row>
+    <>
       <Lightbox />
-      <Wrapper>
-        <ScrollWrapper
-          horizontal
-          scrollEventThrottle={16}
-          snapToInterval={width}
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          snapToAlignment="center"
-          disableIntervalMomentum
-          height={width / currentAspect}
-          onScroll={evt => {
-            const offset = evt.nativeEvent.contentOffset.x;
-            setOffset(offset);
-          }}
-          onLayout={evt => {
-            const currentWidth = evt.nativeEvent.layout.width;
-            if (currentWidth !== width) {
-              setWidth(currentWidth);
-            }
-          }}
-        >
-          <Touchable onPress={() => setLightboxVisible(true)}>
-            <ScrollContent>
-              {media.map(item => (
-                <ScrollPage key={item!.id} width={width}>
-                  <Image media={item!} />
-                </ScrollPage>
-              ))}
-            </ScrollContent>
-          </Touchable>
-        </ScrollWrapper>
-      </Wrapper>
+      <Shadow>
+        <Wrapper>
+          <ScrollWrapper
+            horizontal
+            scrollEventThrottle={16}
+            snapToInterval={width}
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            snapToAlignment="center"
+            disableIntervalMomentum
+            height={width / currentAspect}
+            onScroll={evt => {
+              const offset = evt.nativeEvent.contentOffset.x;
+              setOffset(offset);
+            }}
+            onLayout={evt => {
+              const currentWidth = evt.nativeEvent.layout.width;
+              if (currentWidth !== width) {
+                setWidth(currentWidth);
+              }
+            }}
+          >
+            <Touchable onPress={() => setLightboxVisible(true)}>
+              <ScrollContent>
+                {media.map(item => (
+                  <ScrollPage key={item!.id} width={width}>
+                    <Image media={item!} />
+                  </ScrollPage>
+                ))}
+              </ScrollContent>
+            </Touchable>
+          </ScrollWrapper>
+        </Wrapper>
+      </Shadow>
       <Pager current={currentIndex} total={media.length} />
-    </Row>
+    </>
   );
 };
 
