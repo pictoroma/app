@@ -1,5 +1,9 @@
 import { useCallback, useMemo } from 'react';
-import { useInviteProfileMutation, useRemoveUserMutation, useUsersQuery } from './graphql';
+import {
+  useInviteProfileMutation,
+  useRemoveUserMutation,
+  useUsersQuery,
+} from './graphql';
 import { useErrorNotification } from './utils';
 
 export const useUsers = () => {
@@ -23,7 +27,7 @@ export const useSendInvite = () => {
         variables: { email },
       });
     },
-    [sendInviteMutation],
+    [sendInviteMutation]
   );
 
   return sendInvite;
@@ -38,7 +42,7 @@ export const useRemoveUser = () => {
         variables: { userId: id },
       });
     },
-    [removeUserMutation],
+    [removeUserMutation]
   );
 
   return removeUser;

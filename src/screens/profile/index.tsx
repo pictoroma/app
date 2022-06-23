@@ -21,7 +21,7 @@ import styled from 'styled-components/native';
 
 const Wrapper = styled.ScrollView`
   flex: 1;
-`
+`;
 
 const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
   navigation,
@@ -88,7 +88,10 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
           }
           title={profile?.name || profile?.username}
         />
-        <Popup visible={addFeedVisible} onClose={() => setAddFeedVisible(false)}>
+        <Popup
+          visible={addFeedVisible}
+          onClose={() => setAddFeedVisible(false)}
+        >
           <Row>
             <Input label="Name" value={feedName} onChangeText={setFeedName} />
           </Row>
@@ -127,33 +130,50 @@ const ProfileScreen: React.FC<ProfileMainScreenNavigationProp> = ({
             <Row
               title="Invite"
               onPress={() => setInviteVisible(true)}
-              left={(
-                <Cell><Icon name="user-plus" color="text" /></Cell>
-              )}
+              left={
+                <Cell>
+                  <Icon name="user-plus" color="text" />
+                </Cell>
+              }
             />
             <Row
               title="Users"
               onPress={() => navigation.navigate('AdminUsers', {})}
-              left={(
-                <Cell><Icon name="users" color="text" /></Cell>
-              )}
-              right={(
-                <Cell><Icon name="chevron-right" color="text" /></Cell>
-              )}
+              left={
+                <Cell>
+                  <Icon name="users" color="text" />
+                </Cell>
+              }
+              right={
+                <Cell>
+                  <Icon name="chevron-right" color="text" />
+                </Cell>
+              }
             />
             <Row
               title="Feeds"
               onPress={() => navigation.navigate('AdminFeeds', {})}
-              left={(
-                <Cell><Icon name="layers" color="text" /></Cell>
-              )}
-              right={(
-                <Cell><Icon name="chevron-right" color="text" /></Cell>
-              )}
+              left={
+                <Cell>
+                  <Icon name="layers" color="text" />
+                </Cell>
+              }
+              right={
+                <Cell>
+                  <Icon name="chevron-right" color="text" />
+                </Cell>
+              }
             />
-            <Popup visible={inviteVisible} onClose={() => setInviteVisible(false)}>
+            <Popup
+              visible={inviteVisible}
+              onClose={() => setInviteVisible(false)}
+            >
               <Row>
-                <Input label="Email" value={inviteEmail} onChangeText={setInviteEmail} />
+                <Input
+                  label="Email"
+                  value={inviteEmail}
+                  onChangeText={setInviteEmail}
+                />
               </Row>
               <Row>
                 <Button title="Send" onPress={sendInviteAction} />
