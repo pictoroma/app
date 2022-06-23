@@ -6,6 +6,7 @@ on:
       - main
 jobs:
   publish-web:
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -24,6 +25,7 @@ jobs:
           branch: gh-pages
           folder: web-build 
   publish-native:
+    environment: production
     name: Install and publish
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +49,9 @@ jobs:
       - run: yarn install
 
       - run: echo $BUILD_VERSION
+
+      - name: Expo Publish Channel
+        run: expo publish --non-interactive
 
       - run: eas build -p android --non-interactive
 
