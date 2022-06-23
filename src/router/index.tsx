@@ -22,6 +22,7 @@ import { AcceptInvitationScreen } from '#/screens/login/accept-invitation';
 import { CommentsScreen } from '#/screens/comments';
 import { AdminUsersScreen } from '#/screens/admin/users';
 import { AdminFeedsScreen } from '#/screens/admin/feeds';
+import { TabBar } from '#/components/tab-bar';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const TabStack = createBottomTabNavigator<TabParamList>();
@@ -55,6 +56,7 @@ const Tabs = () => {
     <>
       <PushRegistation />
       <TabStack.Navigator
+        tabBar={props => <TabBar {...props} />}
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: theme.colors.primary,
@@ -67,7 +69,7 @@ const Tabs = () => {
             title: 'Posts',
             tabBarIcon: ({ focused }) => (
               <Icon
-                color={focused ? 'primary' : 'text'}
+                color={focused ? 'background' : 'text'}
                 name="home"
                 size={28}
               />
@@ -82,8 +84,8 @@ const Tabs = () => {
               title: 'Add',
               tabBarIcon: ({ focused }) => (
                 <Icon
-                  color={focused ? 'primary' : 'text'}
-                  name="plus-square"
+                  color={focused ? 'background' : 'text'}
+                  name="plus-circle"
                   size={28}
                 />
               ),
@@ -97,7 +99,7 @@ const Tabs = () => {
             title: 'Profile',
             tabBarIcon: ({ focused }) => (
               <Icon
-                color={focused ? 'primary' : 'text'}
+                color={focused ? 'background' : 'text'}
                 name="user"
                 size={28}
               />
